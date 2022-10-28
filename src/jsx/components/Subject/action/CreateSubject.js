@@ -61,16 +61,16 @@ const CreateSubject = () => {
   return (
     <Fragment>
       <PageTitle
-        activeMenu="Create New Major"
-        motherMenu="Major"
-        pageContent="Create New Major"
+        activeMenu="Create New Subject"
+        motherMenu="Subject"
+        pageContent="Create New Subject"
       />
 
       <div className="row">
         <div className="col-lg-12">
           <div className="card">
             <div className="card-header">
-              <h4 className="card-title">New Major</h4>
+              <h4 className="card-title">New Subject</h4>
             </div>
             <div className="card-body">
               <div className="basic-form">

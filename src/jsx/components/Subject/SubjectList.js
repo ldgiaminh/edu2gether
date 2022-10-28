@@ -58,11 +58,11 @@ const SubjectList = () => {
   //   document.querySelectorAll("#room_wrapper tbody tr")
   // );
 
-  //State For Search
+  //useState For Search
   const [search, setSearch] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
-  //State For Render
+  //useState For Render
   const [loading, setLoading] = useState(true);
   const [subjects, setSubjects] = useState(null);
 

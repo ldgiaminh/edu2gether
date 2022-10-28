@@ -62,10 +62,26 @@ const CourseList = () => {
     document.querySelectorAll("#room_wrapper tbody tr")
   );
 
-  const [search, setSearch] = useState("");
+  //useState For Search
+  const [search, setSearch] = useState([]);
+  const [filterValue, setFilterValue] = useState("");
 
+  //useState For Render
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState(null);
+
+  //Search Function
+  const handleFilter = (e) => {
+    if (e.target.value === "") {
+      setCourses(search);
+    } else {
+      const filterResult = search.filter((item) =>
+        item.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setCourses(filterResult);
+    }
+    setFilterValue(e.target.value);
+  };
 
   //Fetch Data Api
   useEffect(() => {
@@ -74,6 +90,7 @@ const CourseList = () => {
       try {
         const response = await CourseService.getCourses();
         setCourses(response.data);
+        setSearch(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -82,39 +99,39 @@ const CourseList = () => {
     fetchData();
   }, []);
 
-  const sort = 10;
-  const activePag = useRef(0);
-  const [test, settest] = useState(0);
+  // const sort = 10;
+  // const activePag = useRef(0);
+  // const [test, settest] = useState(0);
 
-  // Active data
-  const chageData = (frist, sec) => {
-    for (var i = 0; i < data.length; ++i) {
-      if (i >= frist && i < sec) {
-        data[i].classList.remove("d-none");
-      } else {
-        data[i].classList.add("d-none");
-      }
-    }
-  };
-  // use effect
-  useEffect(() => {
-    setData(document.querySelectorAll("#room_wrapper tbody tr"));
-    //chackboxFun();
-  }, [test]);
+  // // Active data
+  // const chageData = (frist, sec) => {
+  //   for (var i = 0; i < data.length; ++i) {
+  //     if (i >= frist && i < sec) {
+  //       data[i].classList.remove("d-none");
+  //     } else {
+  //       data[i].classList.add("d-none");
+  //     }
+  //   }
+  // };
+  // // use effect
+  // useEffect(() => {
+  //   setData(document.querySelectorAll("#room_wrapper tbody tr"));
+  //   //chackboxFun();
+  // }, [test]);
 
-  // Active pagginarion
-  activePag.current === 0 && chageData(0, sort);
-  // paggination
-  let paggination = Array(Math.ceil(data.length / sort))
-    .fill()
-    .map((_, i) => i + 1);
+  // // Active pagginarion
+  // activePag.current === 0 && chageData(0, sort);
+  // // paggination
+  // let paggination = Array(Math.ceil(data.length / sort))
+  //   .fill()
+  //   .map((_, i) => i + 1);
 
-  // Active paggination & chage data
-  const onClick = (i) => {
-    activePag.current = i;
-    chageData(activePag.current * sort, (activePag.current + 1) * sort);
-    settest(i);
-  };
+  // // Active paggination & chage data
+  // const onClick = (i) => {
+  //   activePag.current = i;
+  //   chageData(activePag.current * sort, (activePag.current + 1) * sort);
+  //   settest(i);
+  // };
 
   const chackbox = document.querySelectorAll(".sorting_7 input");
   const motherChackBox = document.querySelector(".sorting_asc_7 input");
@@ -174,9 +191,8 @@ const CourseList = () => {
                     type="text"
                     className="form-control"
                     placeholder="Search here"
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                    }}
+                    value={filterValue}
+                    onInput={(e) => handleFilter(e)}
                   />
                   <span className="input-group-text">
                     <i className="flaticon-381-search-2"></i>
@@ -221,117 +237,104 @@ const CourseList = () => {
                       </thead>
                       {!loading && (
                         <tbody>
-                          {courses
-                            .filter((course) => {
-                              if (search === "") {
-                                return course;
-                              } else if (
-                                course.name
-                                  .toLowerCase()
-                                  .includes(search.toLowerCase())
-                              ) {
-                                return course;
-                              }
-                              return false;
-                            })
-                            .map((course) => {
-                              return (
-                                <tr role="row" className="odd" key={course.id}>
-                                  <td className="sorting_7">
-                                    <div className="form-check   style-1">
-                                      <input
-                                        type="checkbox"
-                                        onClick={() => chackboxFun()}
-                                        className="form-check-input"
-                                        id="customCheckBox21"
-                                        required=""
-                                      />
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div className="guest-bx">
-                                      <div
-                                        id="carouselExampleControls"
-                                        className="carousel slide me-3"
-                                      >
-                                        <div className="carousel-inner">
-                                          <img
-                                            src={course.image}
-                                            className="d-block w-100"
-                                            alt="..."
-                                          />
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <span className="text-primary">
-                                          #{course.id}
-                                        </span>
-                                        <h4 className="mb-0 mt-1">
-                                          <Link
-                                            className="text-black"
-                                            to={"./course-detail"}
-                                          >
-                                            {course.name}
-                                          </Link>
-                                        </h4>
+                          {courses.map((course) => {
+                            return (
+                              <tr role="row" className="odd" key={course.id}>
+                                <td className="sorting_7">
+                                  <div className="form-check   style-1">
+                                    <input
+                                      type="checkbox"
+                                      onClick={() => chackboxFun()}
+                                      className="form-check-input"
+                                      id="customCheckBox21"
+                                      required=""
+                                    />
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="guest-bx">
+                                    <div
+                                      id="carouselExampleControls"
+                                      className="carousel slide me-3"
+                                    >
+                                      <div className="carousel-inner">
+                                        <img
+                                          src={course.image}
+                                          className="d-block w-100"
+                                          alt="..."
+                                        />
                                       </div>
                                     </div>
-                                  </td>
-                                  <td>
                                     <div>
-                                      <span className="fs-16">
-                                        {course.mentorId}
+                                      <span className="text-primary">
+                                        #{course.id}
                                       </span>
+                                      <h4 className="mb-0 mt-1">
+                                        <Link
+                                          className="text-black"
+                                          to={"./course-detail"}
+                                        >
+                                          {course.name}
+                                        </Link>
+                                      </h4>
                                     </div>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <span className="fs-16">
-                                        {course.classUrl}
-                                      </span>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <span className="fs-16">
-                                        {/* AC, Shower, Double Bed, Towel, Bathup,
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <span className="fs-16">
+                                      {course.mentorId}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <span className="fs-16">
+                                      {course.classUrl}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <span className="fs-16">
+                                      {/* AC, Shower, Double Bed, Towel, Bathup,
                                       <br /> Coffee Set, LED TV, Wifi */}
-                                        {course.detail}
-                                      </span>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <span
-                                        className={
-                                          course.approveStatus === 1
-                                            ? "text-warning font-w600"
-                                            : course.approveStatus === 3
-                                            ? "text-success font-w600"
-                                            : "text-danger font-w600"
-                                        }
-                                      >
-                                        {course.approveStatus === 1
-                                          ? "Pending"
+                                      {course.detail}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <span
+                                      className={
+                                        course.approveStatus === 1
+                                          ? "text-warning font-w600"
                                           : course.approveStatus === 3
-                                          ? "Approved"
-                                          : "Reject"}
-                                      </span>
-                                      {/* <span className="fs-14">
+                                          ? "text-success font-w600"
+                                          : "text-danger font-w600"
+                                      }
+                                    >
+                                      {course.approveStatus === 1
+                                        ? "Pending"
+                                        : course.approveStatus === 3
+                                        ? "Approved"
+                                        : "Reject"}
+                                    </span>
+                                    {/* <span className="fs-14">
                                       Oct 24th - 26th
                                     </span> */}
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <DropdownBlog />
-                                  </td>
-                                </tr>
-                              );
-                            })}
+                                  </div>
+                                </td>
+                                <td>
+                                  <DropdownBlog />
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       )}
                     </table>
-                    <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
+                    {/* <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
                       <div className="dataTables_info">
                         Showing {activePag.current * sort + 1} to{" "}
                         {data.length > (activePag.current + 1) * sort
@@ -379,7 +382,7 @@ const CourseList = () => {
                           Next <i className="fa fa-angle-double-right"></i>
                         </Link>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </Tab.Pane>
