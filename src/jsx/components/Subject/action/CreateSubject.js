@@ -6,6 +6,8 @@ import SubjectService from "../../../../services/api/subject/SubjectService";
 import MajorService from "../../../../services/api/major/MajorService";
 
 const CreateSubject = () => {
+  const history = useHistory();
+
   const [majors, setMajors] = useState([{ id: "", name: "" }]);
 
   const [subjects, setSubjects] = useState({
@@ -38,15 +40,14 @@ const CreateSubject = () => {
 
   const saveSubjects = (e) => {
     e.preventDefault();
-    // SubjectService.saveSubject(subjects)
-    //   .then((response) => {
-    //     console.log(response);
-    //     history.push("/major");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    console.log(subjects);
+    SubjectService.saveSubject(subjects)
+      .then((response) => {
+        console.log(response);
+        history.push("/subject");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const reset = (e) => {
