@@ -54,14 +54,30 @@ const DropdownBlog = () => {
 };
 
 const SubjectList = () => {
-  const [data, setData] = useState(
-    document.querySelectorAll("#room_wrapper tbody tr")
-  );
+  // const [data, setData] = useState(
+  //   document.querySelectorAll("#room_wrapper tbody tr")
+  // );
 
-  const [search, setSearch] = useState("");
+  //State For Search
+  const [search, setSearch] = useState([]);
+  const [filterValue, setFilterValue] = useState("");
 
+  //State For Render
   const [loading, setLoading] = useState(true);
   const [subjects, setSubjects] = useState(null);
+
+  //Search Function
+  const handleFilter = (e) => {
+    if (e.target.value === "") {
+      setSubjects(search);
+    } else {
+      const filterResult = search.filter((item) =>
+        item.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setSubjects(filterResult);
+    }
+    setFilterValue(e.target.value);
+  };
 
   //Fetch Data Api
   useEffect(() => {
@@ -70,6 +86,7 @@ const SubjectList = () => {
       try {
         const response = await SubjectService.getSubjects();
         setSubjects(response.data);
+        setSearch(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -78,39 +95,40 @@ const SubjectList = () => {
     fetchData();
   }, []);
 
-  const sort = 10;
-  const activePag = useRef(0);
-  const [test, settest] = useState(0);
+  // const sort = 10;
+  // const activePag = useRef(0);
+  // const [test, settest] = useState(0);
 
-  // Active data
-  const chageData = (frist, sec) => {
-    for (var i = 0; i < data.length; ++i) {
-      if (i >= frist && i < sec) {
-        data[i].classList.remove("d-none");
-      } else {
-        data[i].classList.add("d-none");
-      }
-    }
-  };
-  // use effect
-  useEffect(() => {
-    setData(document.querySelectorAll("#room_wrapper tbody tr"));
-    //chackboxFun();
-  }, [test]);
+  // // Active data
+  // const chageData = (frist, sec) => {
+  //   for (var i = 0; i < data.length; ++i) {
+  //     if (i >= frist && i < sec) {
+  //       data[i].classList.remove("d-none");
+  //     } else {
+  //       data[i].classList.add("d-none");
+  //     }
+  //   }
+  // };
 
-  // Active pagginarion
-  activePag.current === 0 && chageData(0, sort);
-  // paggination
-  let paggination = Array(Math.ceil(data.length / sort))
-    .fill()
-    .map((_, i) => i + 1);
+  // // use effect
+  // useEffect(() => {
+  //   setData(document.querySelectorAll("#room_wrapper tbody tr"));
+  //   //chackboxFun();
+  // }, [test]);
 
-  // Active paggination & chage data
-  const onClick = (i) => {
-    activePag.current = i;
-    chageData(activePag.current * sort, (activePag.current + 1) * sort);
-    settest(i);
-  };
+  // // Active pagginarion
+  // activePag.current === 0 && chageData(0, sort);
+  // // paggination
+  // let paggination = Array(Math.ceil(data.length / sort))
+  //   .fill()
+  //   .map((_, i) => i + 1);
+
+  // // Active paggination & chage data
+  // const onClick = (i) => {
+  //   activePag.current = i;
+  //   chageData(activePag.current * sort, (activePag.current + 1) * sort);
+  //   settest(i);
+  // };
 
   const chackbox = document.querySelectorAll(".sorting_7 input");
   const motherChackBox = document.querySelector(".sorting_asc_7 input");
@@ -146,9 +164,8 @@ const SubjectList = () => {
                     type="text"
                     className="form-control"
                     placeholder="Search here"
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                    }}
+                    value={filterValue}
+                    onInput={(e) => handleFilter(e)}
                   />
                   <span className="input-group-text">
                     <i className="flaticon-381-search-2"></i>
@@ -192,86 +209,73 @@ const SubjectList = () => {
                       </thead>
                       {!loading && (
                         <tbody>
-                          {subjects
-                            .filter((subject) => {
-                              if (search === "") {
-                                return subject;
-                              } else if (
-                                subject.name
-                                  .toLowerCase()
-                                  .includes(search.toLowerCase())
-                              ) {
-                                return subject;
-                              }
-                              return false;
-                            })
-                            .map((subject) => {
-                              return (
-                                <tr role="row" className="odd" key={subject.id}>
-                                  <td className="sorting_7">
-                                    <div className="form-check   style-1">
-                                      <input
-                                        type="checkbox"
-                                        onClick={() => chackboxFun()}
-                                        className="form-check-input"
-                                        id="customCheckBox21"
-                                        required=""
-                                      />
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div className="guest-bx">
-                                      <div
-                                        id="carouselExampleControls"
-                                        className="carousel slide me-3"
-                                      >
-                                        <div className="carousel-inner">
-                                          <img
-                                            src={subject.image}
-                                            className="d-block w-100"
-                                            alt="..."
-                                          />
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <span className="text-primary">
-                                          #{subject.id}
-                                        </span>
-                                        <h4 className="mb-0 mt-1">
-                                          <Link
-                                            className="text-black"
-                                            to={"./course-detail"}
-                                          >
-                                            {subject.name}
-                                          </Link>
-                                        </h4>
+                          {subjects.map((subject) => {
+                            return (
+                              <tr role="row" className="odd" key={subject.id}>
+                                <td className="sorting_7">
+                                  <div className="form-check   style-1">
+                                    <input
+                                      type="checkbox"
+                                      onClick={() => chackboxFun()}
+                                      className="form-check-input"
+                                      id="customCheckBox21"
+                                      required=""
+                                    />
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="guest-bx">
+                                    <div
+                                      id="carouselExampleControls"
+                                      className="carousel slide me-3"
+                                    >
+                                      <div className="carousel-inner">
+                                        <img
+                                          src={subject.image}
+                                          className="d-block w-100"
+                                          alt="..."
+                                        />
                                       </div>
                                     </div>
-                                  </td>
-                                  <td>
                                     <div>
-                                      <span className="fs-16">
-                                        {subject.majorId}
+                                      <span className="text-primary">
+                                        #{subject.id}
                                       </span>
+                                      <h4 className="mb-0 mt-1">
+                                        <Link
+                                          className="text-black"
+                                          to={"./course-detail"}
+                                        >
+                                          {subject.name}
+                                        </Link>
+                                      </h4>
                                     </div>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <span className="fs-16">
-                                        {subject.detail}
-                                      </span>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <DropdownBlog />
-                                  </td>
-                                </tr>
-                              );
-                            })}
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <span className="fs-16">
+                                      {subject.majorId}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <span className="fs-16">
+                                      {subject.detail}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <DropdownBlog />
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       )}
                     </table>
-                    <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
+                    {/* <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
                       <div className="dataTables_info">
                         Showing {activePag.current * sort + 1} to{" "}
                         {data.length > (activePag.current + 1) * sort
@@ -319,7 +323,7 @@ const SubjectList = () => {
                           Next <i className="fa fa-angle-double-right"></i>
                         </Link>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </Tab.Pane>

@@ -1,37 +1,30 @@
 import PageTitle from "../../../layouts/PageTitle";
 import React, { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import Select from "react-select";
 
 import SubjectService from "../../../../services/api/subject/SubjectService";
 import MajorService from "../../../../services/api/major/MajorService";
 
 const CreateSubject = () => {
-  const history = useHistory();
-
-  //const [majors, setMajors] = useState(null);
+  const [majors, setMajors] = useState([{ id: "", name: "" }]);
 
   const [subjects, setSubjects] = useState({
     name: "",
     detail: "",
     image: "",
+    majorId: "",
   });
 
   //Fetch Data Api
-  const [options, setOptions] = useState([""]);
 
   useEffect(() => {
-    const getData = async () => {
-      const arr = [];
-      await MajorService.getMajors().then((res) => {
-        let result = res.data.items;
-        result.map((user) => {
-          return arr.push({ value: user.login, label: user.login });
-        });
-        setOptions(arr);
-      });
+    const fetchData = async () => {
+      const response = await MajorService.getMajors();
+      const newData = await response.data;
+      setMajors(newData);
+      //console.log(newData);
     };
-    getData();
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -39,16 +32,21 @@ const CreateSubject = () => {
     setSubjects({ ...subjects, [e.target.name]: value });
   };
 
+  // const handleChangeMajor = (e) => {
+  //   setMajors(e.target.value);
+  // };
+
   const saveSubjects = (e) => {
     e.preventDefault();
-    SubjectService.saveSubject(subjects)
-      .then((response) => {
-        console.log(response);
-        history.push("/major");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // SubjectService.saveSubject(subjects)
+    //   .then((response) => {
+    //     console.log(response);
+    //     history.push("/major");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    console.log(subjects);
   };
 
   const reset = (e) => {
@@ -94,8 +92,20 @@ const CreateSubject = () => {
                       <label className="col-form-label col-form-label-lg">
                         Major
                       </label>
-                      <select className="form-control form-control-lg">
-                        <option>Option 1</option>
+                      <select
+                        className="form-control form-control-lg"
+                        onChange={(e) => handleChange(e)}
+                        value={subjects.majorId}
+                        name="majorId"
+                      >
+                        <option value="" disabled>
+                          -- Choose Major --
+                        </option>
+                        {majors.map((major) => (
+                          <option value={major.id} key={major.id}>
+                            {major.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="form-group mb-3 col-md-6">
