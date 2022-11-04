@@ -27,7 +27,7 @@ const Home = () => {
 
   useEffect(() => {
     changeBackground({ value: "light", label: "Light" });
-  }, [changeBackground]);
+  }, []);
 
   const [value, onChange] = useState(new Date());
   return (

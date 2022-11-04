@@ -2,9 +2,15 @@ import axios from "axios";
 
 const SUBJECT_API_BASE_URL = "http://54.255.199.121/api/v1/subjects";
 
+const config = {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+};
+
 class SubjectService {
   saveSubject(Subject) {
-    return axios.post(SUBJECT_API_BASE_URL, Subject);
+    return axios.post(SUBJECT_API_BASE_URL, Subject, config);
   }
 
   getSubjects() {

@@ -253,11 +253,9 @@ const SubjectList = () => {
                                   </div>
                                 </td>
                                 <td>
-                                  <div>
-                                    <span className="fs-16">
-                                      {subject.majorId}
-                                    </span>
-                                  </div>
+                                  <span className="text-dark font-w600">
+                                    {subject.major.name}
+                                  </span>
                                 </td>
                                 <td>
                                   <div>

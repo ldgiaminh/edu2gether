@@ -2,6 +2,12 @@ import PageTitle from "../../../layouts/PageTitle";
 import React, { Fragment, useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../../firebase";
+
+import { v4 } from "uuid";
+import swal from "sweetalert";
+
 import MajorService from "../../../../services/api/major/MajorService";
 
 const CreateMajor = () => {
@@ -10,23 +16,51 @@ const CreateMajor = () => {
   const [majors, setMajors] = useState({
     name: "",
     detail: "",
-    image: "",
   });
+
+  //Use State For Subject Image
+  const [image, setImage] = useState("");
 
   const handleChange = (e) => {
     const value = e.target.value;
     setMajors({ ...majors, [e.target.name]: value });
   };
 
+  const handleChangeImage = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
   const saveMajors = (e) => {
     e.preventDefault();
-    MajorService.saveMajor(majors)
-      .then((response) => {
-        console.log(response);
-        history.push("/major");
+
+    const imageRef = ref(storage, `images/major/${image.name + v4()}`);
+    uploadBytes(imageRef, image)
+      .then((snapshot) => {
+        getDownloadURL(snapshot.ref)
+          .then((url) => {
+            const formData = new FormData();
+            formData.append("name", majors.name);
+            formData.append("detail", majors.detail);
+            formData.append("image", url);
+
+            MajorService.saveMajor(formData)
+              .then(() => {
+                swal("Success!", "Add New Major Successful", "success");
+                history.push("/major");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error.message, "error getting the image url");
+          });
+        setImage(null);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
       });
   };
 
@@ -73,13 +107,18 @@ const CreateMajor = () => {
                       <label className="col-form-label col-form-label-lg">
                         Image
                       </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-lg"
-                        name="image"
-                        onChange={(e) => handleChange(e)}
-                        value={majors.image}
-                      />
+                      <div className="input-group mb-3">
+                        <div className="input-group">
+                          <div className="from-file">
+                            <input
+                              type="file"
+                              name="image"
+                              className="form-file-input form-control"
+                              onChange={handleChangeImage}
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div className="form-group mb-3 col-md-6">
                       <label className="col-form-label col-form-label-lg">

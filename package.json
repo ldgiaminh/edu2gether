@@ -34,6 +34,7 @@
     "create-react-class": "^15.7.0",
     "date-fns": "^2.16.1",
     "draft-js": "^0.11.7",
+    "firebase": "^9.13.0",
     "formik": "^2.2.6",
     "html-to-draftjs": "^1.5.0",
     "http-proxy-middleware": "^2.0.6",
@@ -89,6 +90,7 @@
     "sweetalert2": "^10.10.4",
     "swiper": "^6.5.9",
     "use-scroll-position": "0.0.4",
+    "uuid": "^9.0.0",
     "web-vitals": "^0.2.4",
     "yup": "^0.32.8"
   },
@@ -98,7 +100,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://54.255.199.121/api/v1/",
   "eslintConfig": {
     "extends": [
       "react-app",

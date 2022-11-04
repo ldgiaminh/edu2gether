@@ -2,9 +2,15 @@ import axios from "axios";
 
 const MAJOR_API_BASE_URL = "http://54.255.199.121/api/v1/majors";
 
+const config = {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+};
+
 class MajorService {
   saveMajor(Major) {
-    return axios.post(MAJOR_API_BASE_URL, Major);
+    return axios.post(MAJOR_API_BASE_URL, Major, config);
   }
 
   getMajors() {

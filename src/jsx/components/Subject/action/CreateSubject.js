@@ -2,28 +2,36 @@ import PageTitle from "../../../layouts/PageTitle";
 import React, { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../../firebase";
+
+import { v4 } from "uuid";
+import swal from "sweetalert";
+
 import SubjectService from "../../../../services/api/subject/SubjectService";
 import MajorService from "../../../../services/api/major/MajorService";
 
 const CreateSubject = () => {
   const history = useHistory();
 
+  //Use State For Select
   const [majors, setMajors] = useState([{ id: "", name: "" }]);
 
+  //Use State For Create Subject
   const [subjects, setSubjects] = useState({
     name: "",
     detail: "",
-    image: "",
     majorId: "",
   });
 
-  //Fetch Data Api
+  //Use State For Subject Image
+  const [image, setImage] = useState("");
 
+  //Fetch Major Data Api
   useEffect(() => {
     const fetchData = async () => {
       const response = await MajorService.getMajors();
-      const newData = await response.data;
-      setMajors(newData);
+      setMajors(response.data);
       //console.log(newData);
     };
     fetchData();
@@ -31,22 +39,48 @@ const CreateSubject = () => {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    setSubjects({ ...subjects, [e.target.name]: value });
+    setSubjects({
+      ...subjects,
+      [e.target.name]: value,
+    });
   };
 
-  // const handleChangeMajor = (e) => {
-  //   setMajors(e.target.value);
-  // };
+  const handleChangeImage = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
 
   const saveSubjects = (e) => {
     e.preventDefault();
-    SubjectService.saveSubject(subjects)
-      .then((response) => {
-        console.log(response);
-        history.push("/subject");
+
+    const imageRef = ref(storage, `images/subject/${image.name + v4()}`);
+    uploadBytes(imageRef, image)
+      .then((snapshot) => {
+        getDownloadURL(snapshot.ref)
+          .then((url) => {
+            const formData = new FormData();
+            formData.append("name", subjects.name);
+            formData.append("detail", subjects.detail);
+            formData.append("majorId", subjects.majorId);
+            formData.append("image", url);
+
+            SubjectService.saveSubject(formData)
+              .then(() => {
+                swal("Success!", "Add New Subject Successful", "success");
+                history.push("/subject");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error.message, "error getting the image url");
+          });
+        setImage(null);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
       });
   };
 
@@ -55,8 +89,9 @@ const CreateSubject = () => {
     setSubjects({
       name: "",
       detail: "",
-      image: "",
     });
+    // setMajors({ id: "", name: "" });
+    // setImages([]);
   };
 
   return (
@@ -113,13 +148,18 @@ const CreateSubject = () => {
                       <label className="col-form-label col-form-label-lg">
                         Image
                       </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-lg"
-                        name="image"
-                        onChange={(e) => handleChange(e)}
-                        value={subjects.image}
-                      />
+                      <div className="input-group mb-3">
+                        <div className="input-group">
+                          <div className="from-file">
+                            <input
+                              type="file"
+                              name="image"
+                              className="form-file-input form-control"
+                              onChange={handleChangeImage}
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div className="form-group mb-3 col-md-6">
                       <label className="col-form-label col-form-label-lg">
