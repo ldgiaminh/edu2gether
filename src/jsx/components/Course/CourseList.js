@@ -58,9 +58,9 @@ const DropdownBlog = () => {
 };
 
 const CourseList = () => {
-  const [data, setData] = useState(
-    document.querySelectorAll("#room_wrapper tbody tr")
-  );
+  // const [data, setData] = useState(
+  //   document.querySelectorAll("#room_wrapper tbody tr")
+  // );
 
   //useState For Search
   const [search, setSearch] = useState([]);
@@ -229,8 +229,8 @@ const CourseList = () => {
                           </th>
                           <th>Course Name</th>
                           <th>Mentor</th>
-                          <th>Class</th>
-                          <th>Detail</th>
+                          <th>Major</th>
+                          <th>Subject</th>
                           <th>Status</th>
                           <th className="bg-none"></th>
                         </tr>
@@ -290,7 +290,7 @@ const CourseList = () => {
                                 <td>
                                   <div>
                                     <span className="fs-16">
-                                      {course.classUrl}
+                                      {course.subject.name}
                                     </span>
                                   </div>
                                 </td>
@@ -299,7 +299,8 @@ const CourseList = () => {
                                     <span className="fs-16">
                                       {/* AC, Shower, Double Bed, Towel, Bathup,
                                       <br /> Coffee Set, LED TV, Wifi */}
-                                      {course.detail}
+                                      {course.major.name
+                                      }
                                     </span>
                                   </div>
                                 </td>

@@ -26,6 +26,7 @@ const CreateSubject = () => {
 
   //Use State For Subject Image
   const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   //Fetch Major Data Api
   useEffect(() => {
@@ -55,33 +56,23 @@ const CreateSubject = () => {
     e.preventDefault();
 
     const imageRef = ref(storage, `images/subject/${image.name + v4()}`);
-    uploadBytes(imageRef, image)
-      .then((snapshot) => {
-        getDownloadURL(snapshot.ref)
-          .then((url) => {
-            const formData = new FormData();
-            formData.append("name", subjects.name);
-            formData.append("detail", subjects.detail);
-            formData.append("majorId", subjects.majorId);
-            formData.append("image", url);
-
-            SubjectService.saveSubject(formData)
-              .then(() => {
-                swal("Success!", "Add New Subject Successful", "success");
-                history.push("/subject");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+    uploadBytes(imageRef, image).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        const formData = new FormData();
+        formData.append("name", subjects.name);
+        formData.append("detail", subjects.detail);
+        formData.append("majorId", subjects.majorId);
+        formData.append("image", url);
+        SubjectService.saveSubject(formData)
+          .then(() => {
+            swal("Success!", "Add New Subject Successful", "success");
+            history.push("/subject");
           })
           .catch((error) => {
-            console.log(error.message, "error getting the image url");
+            console.log(error);
           });
-        setImage(null);
-      })
-      .catch((error) => {
-        console.log(error.message);
       });
+    });
   };
 
   const reset = (e) => {

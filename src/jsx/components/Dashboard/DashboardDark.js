@@ -26,7 +26,7 @@ const DashboardDark = () => {
   const { changeBackground } = useContext(ThemeContext);
   useEffect(() => {
     changeBackground({ value: "dark", label: "Dark" });
-  }, [changeBackground]);
+  }, []);
   const [value, onChange] = useState(new Date());
   return (
     <>
