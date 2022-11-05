@@ -6,7 +6,7 @@ import Approved from "./Status/Approved/Approved";
 import Pending from "./Status/Pending/Pending";
 import Reject from "./Status/Reject/Reject";
 
-import CourseService from "../../../services/api/CourseService";
+import CourseService from "../../../services/api/course/CourseService";
 
 const DropdownBlog = () => {
   return (
@@ -299,8 +299,7 @@ const CourseList = () => {
                                     <span className="fs-16">
                                       {/* AC, Shower, Double Bed, Towel, Bathup,
                                       <br /> Coffee Set, LED TV, Wifi */}
-                                      {course.major.name
-                                      }
+                                      {course.major.name}
                                     </span>
                                   </div>
                                 </td>

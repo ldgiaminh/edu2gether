@@ -1,6 +1,9 @@
 import PageTitle from "../../../layouts/PageTitle";
 import React, { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import Loader from "../../../loader";
+import { loadingToggleAction } from "../../../../store/actions/AuthActions";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../../firebase";
@@ -11,8 +14,9 @@ import swal from "sweetalert";
 import SubjectService from "../../../../services/api/subject/SubjectService";
 import MajorService from "../../../../services/api/major/MajorService";
 
-const CreateSubject = () => {
+const CreateSubject = (props) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   //Use State For Select
   const [majors, setMajors] = useState([{ id: "", name: "" }]);
@@ -26,14 +30,12 @@ const CreateSubject = () => {
 
   //Use State For Subject Image
   const [image, setImage] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
   //Fetch Major Data Api
   useEffect(() => {
     const fetchData = async () => {
       const response = await MajorService.getMajors();
       setMajors(response.data);
-      //console.log(newData);
     };
     fetchData();
   }, []);
@@ -55,7 +57,8 @@ const CreateSubject = () => {
   const saveSubjects = (e) => {
     e.preventDefault();
 
-    const imageRef = ref(storage, `images/subject/${image.name + v4()}`);
+    dispatch(loadingToggleAction(true));
+    const imageRef = ref(storage, `images/admin/subject/${image.name + v4()}`);
     uploadBytes(imageRef, image).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         const formData = new FormData();
@@ -81,18 +84,16 @@ const CreateSubject = () => {
       name: "",
       detail: "",
     });
-    // setMajors({ id: "", name: "" });
-    // setImages([]);
   };
 
   return (
     <Fragment>
+      {props.showLoading && <Loader />}
       <PageTitle
         activeMenu="Create New Subject"
         motherMenu="Subject"
         pageContent="Create New Subject"
       />
-
       <div className="row">
         <div className="col-lg-12">
           <div className="card">
@@ -181,4 +182,11 @@ const CreateSubject = () => {
   );
 };
 
-export default CreateSubject;
+const mapStateToProps = (state) => {
+  return {
+    errorMessage: state.auth.errorMessage,
+    successMessage: state.auth.successMessage,
+    showLoading: state.auth.showLoading,
+  };
+};
+export default connect(mapStateToProps)(CreateSubject);

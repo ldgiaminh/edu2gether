@@ -1,6 +1,9 @@
 import PageTitle from "../../../layouts/PageTitle";
 import React, { Fragment, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import Loader from "../../../loader";
+import { loadingToggleAction } from "../../../../store/actions/AuthActions";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../../firebase";
@@ -10,8 +13,9 @@ import swal from "sweetalert";
 
 import MajorService from "../../../../services/api/major/MajorService";
 
-const CreateMajor = () => {
+const CreateMajor = (props) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [majors, setMajors] = useState({
     name: "",
@@ -35,7 +39,8 @@ const CreateMajor = () => {
   const saveMajors = (e) => {
     e.preventDefault();
 
-    const imageRef = ref(storage, `images/major/${image.name + v4()}`);
+    dispatch(loadingToggleAction(true));
+    const imageRef = ref(storage, `images/admin/major/${image.name + v4()}`);
     uploadBytes(imageRef, image)
       .then((snapshot) => {
         getDownloadURL(snapshot.ref)
@@ -75,6 +80,7 @@ const CreateMajor = () => {
 
   return (
     <Fragment>
+      {props.showLoading && <Loader />}
       <PageTitle
         activeMenu="Create New Major"
         motherMenu="Major"
@@ -149,4 +155,11 @@ const CreateMajor = () => {
   );
 };
 
-export default CreateMajor;
+const mapStateToProps = (state) => {
+  return {
+    errorMessage: state.auth.errorMessage,
+    successMessage: state.auth.successMessage,
+    showLoading: state.auth.showLoading,
+  };
+};
+export default connect(mapStateToProps)(CreateMajor);
