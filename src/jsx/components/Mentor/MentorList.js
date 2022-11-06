@@ -59,9 +59,9 @@ const MentorList = () => {
     history.push(`./mentor-edit-${id}`);
   };
 
-  const sort = 10;
-  const activePag = useRef(0);
-  const [test, settest] = useState(0);
+  // const sort = 10;
+  // const activePag = useRef(0);
+  // const [test, settest] = useState(0);
 
   // // Active data
   // const chageData = (frist, sec) => {

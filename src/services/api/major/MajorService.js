@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const MAJOR_API_BASE_URL = "http://54.255.199.121/api/v1/majors";
+const MAJOR_API_BASE_URL = "https://54.255.199.121/api/v1/majors";
 
 const config = {
   headers: {

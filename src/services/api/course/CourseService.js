@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const COURSE_API_BASE_URL = "http://54.255.199.121/api/v1/courses";
+const COURSE_API_BASE_URL = "https://54.255.199.121/api/v1/courses";
 
 const config = {
   headers: {
@@ -22,7 +22,7 @@ class CourseService {
   }
 
   getCourseById(id) {
-    return axios.get(COURSE_API_BASE_URL + "/" + id + "?CourseId=" + id);
+    return axios.get(COURSE_API_BASE_URL + "/" + id);
   }
 
   updateCourse(Course) {
