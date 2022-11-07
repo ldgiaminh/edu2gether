@@ -1,39 +1,150 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from "react";
+
 import { Link } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import swal from "sweetalert";
+
+import CourseService from "../../../services/api/course/CourseService";
+
+import { Row, Col, Card } from "react-bootstrap";
 
 ///Images
 import profile10 from "./../../../images/profile/10.jpg";
 
 import PageTitle from "../../layouts/PageTitle";
+import hotel1 from "../../../images/hotel/pic1.jpg";
+import { millisecondsToHours } from "date-fns/esm";
 
-import BookingSlider from "./Orthers/BookingSlider";
+//import BookingSlider from "./Orthers/BookingSlider";
 
 const GuestDetail = () => {
+  const { id } = useParams();
+
+  const history = useHistory();
+
+  const [mentors, setMentor] = useState({
+    mentor: "",
+  });
+
+  const [majors, setMajors] = useState({
+    major: "",
+  });
+
+  const [subjects, setSubjects] = useState({
+    subject: "",
+  });
+
+  const [courses, setCourses] = useState({
+    id: id,
+    name: "",
+    image: "",
+    detail: "",
+    videoUrl: "",
+    price: "",
+    discount: "",
+    capacity: "",
+    classUrl: "",
+    estimateHour: "",
+    subjectId: "",
+    mentorId: "",
+    createTime: "",
+    updateTime: "",
+    publishDate: "",
+    isActived: "",
+    approver: "",
+    approveStatus: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await CourseService.getCourseById(id);
+        setCourses(response.data);
+        setMentor(response.data);
+        setMajors(response.data);
+        setSubjects(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const handleChangeStatus = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("name", courses.name);
+    formData.append("detail", courses.detail);
+    formData.append("videoUrl", "");
+    formData.append("image", courses.image);
+    formData.append("price", courses.price);
+    formData.append("discount", courses.discount);
+    formData.append("capacity", courses.capacity);
+    formData.append("classUrl", courses.classUrl);
+    formData.append("estimateHour", courses.estimateHour);
+    formData.append("subjectId", courses.subjectId);
+    formData.append("mentorId", courses.mentorId);
+    formData.append("createTime", courses.createTime);
+    formData.append("updateTime", "");
+    formData.append("publishDate", "");
+    formData.append("isActived", courses.isActived);
+    formData.append("approver", courses.approver);
+    formData.append("approveStatus", 3);
+    CourseService.updateCourse(formData)
+      .then((response) => {
+        console.log(response.data);
+        swal("Success!", "Approved Successful", "success");
+        history.push("/course");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+  };
+
   return (
     <>
       <PageTitle
         activeMenu="Course Detail"
         motherMenu="Course"
-        pageContent="Mentor Detail"
+        pageContent="Course Detail"
       />
       <div className="row">
         <div className="col-xl-9 col-xxl-8">
           <div className="card">
-            <div className="card-header border-0 pb-0">
-              <h4 className="card-title">Current Booking</h4>
-            </div>
+            {/* <div className="card-header border-0 pb-0">
+              <h4 className="card-title">{courses.name}</h4>
+            </div> */}
             <div className="card-body">
-              <BookingSlider />
-              <div className="d-flex mt-4 flex-wrap">
-                <h4 className="card-title me-auto">Room Facilities</h4>
-                <h5 className="card-title">
-                  AC, Shower, Double Bed, Towel, Bathup, Coffee Set, LED TV,
-                  Wifi
-                </h5>
+              <div className="owl-carousel gallery-carousel owl-theme pb-3">
+                <div className="items px-2">
+                  <img src={courses.image} alt="" />
+                </div>
+              </div>
+              <div className="card-header d-flex flex-wrap">
+                <h3 className="me-auto">{courses.name}</h3>
+                <h3
+                  className={
+                    courses.approveStatus === 1
+                      ? "me-5 badge badge-xl badge-warning"
+                      : courses.approveStatus === 3
+                      ? "me-5 badge badge-xl badge-success"
+                      : "me-5 badge badge-xl badge-danger"
+                  }
+                >
+                  {courses.approveStatus === 1
+                    ? "Pending"
+                    : courses.approveStatus === 3
+                    ? "Approved"
+                    : "Reject"}
+                </h3>
               </div>
             </div>
-            <div className="card-body d-flex pt-0 align-items-center flex-wrap">
-              <div className="d-flex align-items-center me-5 pe-4 mb-xxl-0 mb-2">
+            <div className="card-body d-flex pt-0 ms-3 align-items-center flex-wrap course-detail-title">
+              <div className="d-flex align-items-center me-5 pe-4 mb-xxl-0 mb-2  ">
                 <span className="key-icon me-3">
                   <svg
                     width="32"
@@ -51,31 +162,41 @@ const GuestDetail = () => {
                   </svg>
                 </span>
                 <div>
-                  <h5 className="text-primary">Booking ID #0052466623</h5>
-                  <h4 className="card-title mb-0">King Deluxe B-23</h4>
+                  <h5 className="text-primary">Course ID #{courses.id}</h5>
+                  <h4 className="card-title mb-0">{courses.classUrl}</h4>
                 </div>
               </div>
-              <div className="d-sm-flex d-block align-items-center">
-                <div className="me-5 mb-sm-0 mb-3">
+
+              <div className="d-sm-flex d-inline-block align-items-center mt-4 course-detail-infor">
+                <div className="col-5 me-5 mb-sm-0 mb-3">
                   <p className="mb-2">
-                    <i className="far fa-user scale3 me-3"></i>Room Capacity
-                  </p>
-                  <h4 className="mb-0 card-title">3-5 Person</h4>
-                </div>
-                <div className="me-5 mb-sm-0 mb-3">
-                  <p className="mb-2">
-                    <i className="fas fa-bed scale3 me-3"></i>Bed Type
-                  </p>
-                  <h4 className="mb-0 card-title">Double</h4>
-                </div>
-                <div>
-                  <p className="mb-2">
-                    <i className="far fa-calendar-minus scale3 me-3"></i>Booking
+                    <i className="far fa-calendar-minus scale3 me-3"></i>Create
                     Date
                   </p>
-                  <h4 className="mb-0 card-title">Oct 25th - 28th, 2020</h4>
+                  <h4 className="mb-0 card-title">{courses.createTime}</h4>
+                </div>
+                <div className="col-3 me-5 mb-sm-0 mb-3">
+                  <p className="mb-2">
+                    <i className="far fa-user scale3 me-3"></i>Estimate Hours
+                  </p>
+                  <h4 className="mb-0 card-title">
+                    {courses.estimateHour} hours
+                  </h4>
+                </div>
+                <div className="col-4 me-5 mb-sm-0 mb-3">
+                  <p className="mb-2">
+                    <i className="fas fa-bed scale3 me-3"></i>Price
+                  </p>
+                  <h4 className="mb-0 card-title">{courses.price} VND</h4>
                 </div>
               </div>
+              <button
+                type="button"
+                class="me-2 btn btn-outline-success btn-rounded"
+                onClick={handleChangeStatus}
+              >
+                Approve
+              </button>
             </div>
           </div>
         </div>
@@ -84,41 +205,90 @@ const GuestDetail = () => {
             <div className="card-body">
               <div className="d-flex align-items-center">
                 <img
-                  src={profile10}
+                  src={mentors.mentor.image}
                   alt=""
                   className="rounded profile-img me-4"
                 />
                 <div>
-                  <h5 className="text-primary">#GS-2234</h5>
-                  <h4 className="mb-0">Louis Khan</h4>
+                  <h5 className="text-primary">#{mentors.mentor.id}</h5>
+                  <h4 className="mb-0">{mentors.mentor.fullName}</h4>
                 </div>
               </div>
-              <div className="row mt-4 pt-3">
+              <div className="row mt-1 pt-3">
                 <div className="col-8">
                   <Link to={"#"} className="btn btn-dark light btn-block">
-                    Edit Profile
+                    View Profile
                   </Link>
                 </div>
-                <div className="col-4">
+                {/* <div className="col-4">
                   <Link to={"#"} className="btn btn-danger btn-block">
                     <i className="far fa-times-circle scale3"></i>
                   </Link>
-                </div>
+                </div> */}
               </div>
               <ul className="user-info-list">
                 <li>
                   <i className="fas fa-phone-volume"></i>
-                  <span>+12 3456 678</span>
+                  <span>{mentors.mentor.phone}</span>
                 </li>
                 <li>
                   <i className="far fa-envelope"></i>
-                  <span className="overflow-hidden">louiskhan002@mail.com</span>
+                  <span className="overflow-hidden">{mentors.mentor.job}</span>
                 </li>
                 <li>
                   <i className="fas fa-map-marker-alt"></i>
-                  <span>New Avenue Street Corner South London 224151</span>
+                  <span>
+                    {mentors.mentor.address}, {mentors.mentor.country}
+                  </span>
                 </li>
               </ul>
+              {/* <Col xs={12}>
+                <hr />
+                <br />
+              </Col> */}
+            </div>
+            <div className="card-header ">
+              <div className="card-body p-0 pb-3">
+                <h3 className="text-align-center">More Information</h3>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">
+                    <span className="mb-0 title">Publish Date</span> :
+                    <span className="text-black ms-2">
+                      {courses.publishDate}
+                    </span>
+                  </li>
+                  <li className="list-group-item">
+                    <span className="mb-0 title">Update Date</span> :
+                    <span className="text-black ms-2">
+                      {courses.publishDate}
+                    </span>
+                  </li>
+                  <li className="list-group-item">
+                    <span className="mb-0 title">Capacity</span> :
+                    <span className="text-black desc-text ms-2">
+                      {courses.capacity}
+                    </span>
+                  </li>
+                  <li className="list-group-item">
+                    <span className="mb-0 title">Discount</span> :
+                    <span className="text-black ms-2">
+                      {courses.discount} %
+                    </span>
+                  </li>
+                  <li className="list-group-item">
+                    <span className="mb-0 title">Subject</span> :
+                    <span className="text-black ms-2">
+                      {subjects.subject.name}
+                    </span>
+                  </li>
+                  <li className="list-group-item">
+                    <span className="mb-0 title">Major</span> :
+                    <span className="text-black desc-text ms-2">
+                      {majors.major.name}
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

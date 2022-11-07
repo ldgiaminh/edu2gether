@@ -26,7 +26,11 @@ class CourseService {
   }
 
   updateCourse(Course) {
-    return axios.patch(COURSE_API_BASE_URL, { data: Course });
+    return axios.patch(COURSE_API_BASE_URL, Course, config);
+  }
+
+  getCourseByMentorId(id) {
+    return axios.get(COURSE_API_BASE_URL + "/mentors/" + id);
   }
 }
 

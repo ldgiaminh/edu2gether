@@ -223,7 +223,7 @@ const MentorList = () => {
                                       </span>
                                       <h4 className="mb-0 mt-1">
                                         <Link
-                                          to={"./mentor-detail"}
+                                          to={`./mentor-detail-${mentor.id}`}
                                           className="text-black"
                                         >
                                           {mentor.fullName}

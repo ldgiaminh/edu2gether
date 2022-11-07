@@ -30,6 +30,7 @@ import Error503 from "./pages/Error503";
 import CourseList from "./components/Course/CourseList";
 import CourseDetail from "./components/Course/CourseDetail";
 import CreateCourse from "./components/Course/Action/CreateCourse";
+import EditCourse from "./components/Course/Action/EditCourse";
 
 //Major
 import MajorList from "./components/Major/MajorList";
@@ -76,8 +77,9 @@ const Markup = () => {
 
     //Course
     { url: "course", component: CourseList },
-    { url: "course-detail", component: CourseDetail },
     { url: "create-course", component: CreateCourse },
+    { url: "course-detail-:id", component: CourseDetail },
+    { url: "course-edit-:id", component: EditCourse },
 
     //Major
     { url: "major", component: MajorList },
@@ -89,7 +91,7 @@ const Markup = () => {
 
     //Mentor
     { url: "mentor", component: MentorList },
-    { url: "mentor-detail", component: MentorDetail },
+    { url: "mentor-detail-:id", component: MentorDetail },
     { url: "mentor-edit-:id", component: EditMentor },
 
     //Mentee

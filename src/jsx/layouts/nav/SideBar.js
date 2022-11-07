@@ -64,7 +64,12 @@ const SideBar = () => {
       "task",
     ],
     //Course
-    course = ["course", "course-detail", "create-course"],
+    course = [
+      "course",
+      "course-detail-:id",
+      "create-course",
+      "course-edit-:id",
+    ],
     //Major
     major = ["major", "create-major"],
     //Subject

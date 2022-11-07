@@ -44577,7 +44577,7 @@ table.dataTable.display tbody td {
   width: 100%;
   border-radius: 0.875rem;
   object-fit: cover;
-  height: 13.4375rem;
+  height: 18rem;
 }
 .owl-carousel.gallery-carousel .owl-nav .owl-prev,
 .owl-carousel.gallery-carousel .owl-nav .owl-next {
@@ -46044,4 +46044,11 @@ table.dataTable.display tbody td {
   color: #fff;
 }
 
+.course-detail-title {
+  margin-top: -300px !important;
+}
+
+.course-detail-infor {
+  margin-top: -200px !important;
+}
 /*# sourceMappingURL=style.css.map */

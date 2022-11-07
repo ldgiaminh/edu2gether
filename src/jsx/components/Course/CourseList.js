@@ -1,66 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown, Tab, Nav } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
-import Approved from "./Status/Approved/Approved";
-import Pending from "./Status/Pending/Pending";
-import Reject from "./Status/Reject/Reject";
+// import Approved from "./Status/Approved/Approved";
+// import Pending from "./Status/Pending/Pending";
+// import Reject from "./Status/Reject/Reject";
 
 import CourseService from "../../../services/api/course/CourseService";
-
-const DropdownBlog = () => {
-  return (
-    <>
-      <Dropdown className="dropdown">
-        <Dropdown.Toggle
-          as="div"
-          className="btn-link i-false"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z"
-              stroke="#262626"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M18 12C18 12.5523 18.4477 13 19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12Z"
-              stroke="#262626"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M4 12C4 12.5523 4.44772 13 5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12Z"
-              stroke="#262626"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Dropdown.Toggle>
-        <Dropdown.Menu className="dropdown-menu">
-          <Dropdown.Item className="dropdown-item">Edit</Dropdown.Item>
-          <Dropdown.Item className="dropdown-item">Delete</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </>
-  );
-};
 
 const CourseList = () => {
   // const [data, setData] = useState(
   //   document.querySelectorAll("#room_wrapper tbody tr")
   // );
+
+  const history = useHistory();
 
   //useState For Search
   const [search, setSearch] = useState([]);
@@ -98,6 +52,11 @@ const CourseList = () => {
     };
     fetchData();
   }, []);
+
+  const editCourse = (e, id) => {
+    e.preventDefault();
+    history.push(`./course-edit-${id}`);
+  };
 
   // const sort = 10;
   // const activePag = useRef(0);
@@ -272,7 +231,7 @@ const CourseList = () => {
                                       <h4 className="mb-0 mt-1">
                                         <Link
                                           className="text-black"
-                                          to={"./course-detail"}
+                                          to={`./course-detail-${course.id}`}
                                         >
                                           {course.name}
                                         </Link>
@@ -283,7 +242,7 @@ const CourseList = () => {
                                 <td>
                                   <div>
                                     <span className="fs-16">
-                                      {course.mentorId}
+                                      {course.mentor.fullName}
                                     </span>
                                   </div>
                                 </td>
@@ -326,7 +285,57 @@ const CourseList = () => {
                                   </div>
                                 </td>
                                 <td>
-                                  <DropdownBlog />
+                                  <Dropdown className="dropdown">
+                                    <Dropdown.Toggle
+                                      as="div"
+                                      className="btn-link i-false"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false"
+                                    >
+                                      <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z"
+                                          stroke="#262626"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                        <path
+                                          d="M18 12C18 12.5523 18.4477 13 19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12Z"
+                                          stroke="#262626"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                        <path
+                                          d="M4 12C4 12.5523 4.44772 13 5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12Z"
+                                          stroke="#262626"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                      </svg>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="dropdown-menu">
+                                      <Dropdown.Item
+                                        className="dropdown-item"
+                                        onClick={(e, id) =>
+                                          editCourse(e, course.id)
+                                        }
+                                      >
+                                        Edit
+                                      </Dropdown.Item>
+                                      {/* <Dropdown.Item className="dropdown-item">
+                                        Delete
+                                      </Dropdown.Item> */}
+                                    </Dropdown.Menu>
+                                  </Dropdown>
                                 </td>
                               </tr>
                             );
@@ -386,7 +395,7 @@ const CourseList = () => {
                   </div>
                 </div>
               </Tab.Pane>
-              <Tab.Pane eventKey="Approved">
+              {/* <Tab.Pane eventKey="Approved">
                 <Approved />
               </Tab.Pane>
               <Tab.Pane eventKey="Pending">
@@ -394,7 +403,7 @@ const CourseList = () => {
               </Tab.Pane>
               <Tab.Pane eventKey="Reject">
                 <Reject />
-              </Tab.Pane>
+              </Tab.Pane> */}
             </Tab.Content>
           </div>
         </div>
@@ -403,5 +412,4 @@ const CourseList = () => {
   );
 };
 
-export { DropdownBlog };
 export default CourseList;
