@@ -32,6 +32,8 @@ import CourseDetail from "./components/Course/CourseDetail";
 import CreateCourse from "./components/Course/Action/CreateCourse";
 import EditCourse from "./components/Course/Action/EditCourse";
 
+//Booking
+import BookingList from "./components/Booking/BookingList";
 //Major
 import MajorList from "./components/Major/MajorList";
 import CreateMajor from "./components/Major/action/CreateMajor";
@@ -80,6 +82,9 @@ const Markup = () => {
     { url: "create-course", component: CreateCourse },
     { url: ":id-course-detail", component: CourseDetail },
     { url: ":id-course-edit", component: EditCourse },
+
+    //Booking
+    { url: "booking", component: BookingList },
 
     //Major
     { url: "major", component: MajorList },

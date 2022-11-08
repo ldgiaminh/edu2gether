@@ -55,7 +55,7 @@ const CourseList = () => {
 
   const editCourse = (e, id) => {
     e.preventDefault();
-    history.push(`./${id}-course-edit`);
+    history.push(`./course-edit-${id}`);
   };
 
   // const sort = 10;
@@ -231,7 +231,7 @@ const CourseList = () => {
                                       <h4 className="mb-0 mt-1">
                                         <Link
                                           className="text-black"
-                                          to={`./${course.id}-course-detail`}
+                                          to={`./course-detail-${course.id}`}
                                         >
                                           {course.name}
                                         </Link>

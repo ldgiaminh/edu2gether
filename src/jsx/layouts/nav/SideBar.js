@@ -65,6 +65,8 @@ const SideBar = () => {
     ],
     //Course
     course = ["course", "id-course-detail", "create-course", ":id-course-edit"],
+    //Booking
+    booking = ["booking"],
     //Major
     major = ["major", "create-major"],
     //Subject
@@ -141,6 +143,12 @@ const SideBar = () => {
             <Link to="mentee" className="ai-icon">
               <i className="flaticon-381-user-7"></i>
               <span className="nav-text">Mentee</span>
+            </Link>
+          </li>
+          <li className={`${booking.includes(path) ? "mm-active" : ""}`}>
+            <Link to="booking" className="ai-icon">
+              <i className="flaticon-381-windows"></i>
+              <span className="nav-text">Booking</span>
             </Link>
           </li>
         </MM>
