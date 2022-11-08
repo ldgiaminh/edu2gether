@@ -56,7 +56,7 @@ const MentorList = () => {
 
   const editMentor = (e, id) => {
     e.preventDefault();
-    history.push(`./mentor-edit-${id}`);
+    history.push(`./${id}-mentor-edit`);
   };
 
   // const sort = 10;
@@ -223,7 +223,7 @@ const MentorList = () => {
                                       </span>
                                       <h4 className="mb-0 mt-1">
                                         <Link
-                                          to={`./mentor-detail-${mentor.id}`}
+                                          to={`./${mentor.id}-mentor-detail`}
                                           className="text-black"
                                         >
                                           {mentor.fullName}

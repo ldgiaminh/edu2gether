@@ -51,7 +51,7 @@ const MenteeList = () => {
 
   const editMetees = (e, id) => {
     e.preventDefault();
-    history.push(`./mentee-edit-${id}`);
+    history.push(`./${id}-mentee-edit`);
   };
 
   // const sort = 5;
@@ -193,7 +193,7 @@ const MenteeList = () => {
                                       <h4 className="mt-1">
                                         <Link
                                           className="text-black"
-                                          to={"./mentee-detail"}
+                                          to={`./${mentee.id}-mentee-detail`}
                                         >
                                           {mentee.fullName}
                                         </Link>

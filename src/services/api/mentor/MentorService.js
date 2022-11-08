@@ -11,10 +11,6 @@ class MentorService {
     return axios.get(MENTOR_API_BASE_URL);
   }
 
-  deleteMentor(id) {
-    return axios.delete(MENTOR_API_BASE_URL + "/" + id);
-  }
-
   getMentorById(id) {
     return axios.get(MENTOR_API_BASE_URL + "/" + id);
   }

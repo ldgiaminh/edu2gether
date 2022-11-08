@@ -17,10 +17,6 @@ class SubjectService {
     return axios.get(SUBJECT_API_BASE_URL);
   }
 
-  deleteSubject(id) {
-    return axios.delete(SUBJECT_API_BASE_URL + "/" + id);
-  }
-
   getSubjectById(id) {
     return axios.get(SUBJECT_API_BASE_URL + "/" + id + "?SubjectId=" + id);
   }

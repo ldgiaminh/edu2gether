@@ -28,16 +28,6 @@ const MentorDetail = () => {
   const history = useHistory();
 
   const [activeToggle, setActiveToggle] = useState("aboutMe");
-  const [sendMessage, setSendMessage] = useState(false);
-  const [postModal, setPostModal] = useState(false);
-  const [cameraModal, setCameraModal] = useState(false);
-  const [linkModal, setLinkModal] = useState(false);
-  const [replayModal, setReplayModal] = useState(false);
-  const options = {
-    settings: {
-      overlayColor: "#000000",
-    },
-  };
 
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState(null);
@@ -57,53 +47,20 @@ const MentorDetail = () => {
     approveStatusId: "",
   });
 
-  const handleChangeStatus = (e) => {
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setMentors({ ...mentors, [e.target.name]: value });
+  };
+
+  const updateMentor = (e) => {
     e.preventDefault();
-    // const formData = new FormData();
-    // formData.append("id", id);
-    // formData.append("fullName", courses.fullName);
-    // formData.append("phone", courses.phone);
-    // formData.append("address", mentor.address);
-    // formData.append("country", courses.image);
-    // formData.append("evidence", courses.price);
-    // formData.append("job", courses.discount);
-    // formData.append("gender", courses.capacity);
-    // formData.append("image", courses.classUrl);
-    // formData.append("websiteUrl", courses.estimateHour);
-    // formData.append("subjectId", courses.subjectId);
-    // formData.append("mentorId", courses.mentorId);
-    // formData.append("createTime", courses.createTime);
-    // formData.append("updateTime", "");
-    // formData.append("publishDate", "");
-    // formData.append("isActived", courses.isActived);
-    // formData.append("approver", courses.approver);
-    // formData.append("approveStatus", 3);
-    // setMentors((mentor) => {
-    //   mentor.id = id;
-    //   mentor.fullName = mentor.fullName;
-    //   mentor.phone = mentor.phone;
-    //   mentor.address = mentor.address;
-    //   mentor.country = mentor.country;
-    //   mentor.qualification = mentor.qualification;
-    //   mentor.evidence = mentor.evidence;
-    //   mentor.job = mentor.job;
-    //   mentor.gender = mentor.gender;
-    //   mentor.image = mentor.image;
-    //   mentor.websiteUrl = mentor.websiteUrl;
-    //   mentor.approveStatusId = 3;
-    // });
-    // CourseService.updateCourse(mentor)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     swal("Success!", "Approved Successful", "success");
-    //     history.push("/course");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
+    MentorService.updateMentor(mentors)
+      .then(() => {
+        //history.push("./mentor");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     console.log(mentors);
   };
 
@@ -137,7 +94,7 @@ const MentorDetail = () => {
       <PageTitle activeMenu="Profile" motherMenu="App" />
 
       <div className="row">
-        <div className="col-lg-12">
+        <div className="col-lg-">
           <div className="profile card card-body px-3 pt-3 pb-0">
             <div className="profile-head">
               {/* <div className="photo-content ">
@@ -153,60 +110,9 @@ const MentorDetail = () => {
                 </div>
                 <div className="profile-details">
                   <div className="profile-name px-3 pt-2">
-                    <h4 className="text-primary mb-0">{mentors.fullName}</h4>
-                    <p>{mentors.job}</p>
+                    <h2 className="text-primary mb-0">{mentors.fullName}</h2>
+                    <h4>{mentors.job}</h4>
                   </div>
-                  {/* <div className="profile-email px-2 pt-2">
-                    <h4 className="text-muted mb-0">hello@email.com</h4>
-                    <p>Email</p>
-                  </div> */}
-                  {/* <Dropdown className="dropdown ms-auto">
-                    <Dropdown.Toggle
-                      variant="primary"
-                      className="btn btn-primary light sharp i-false"
-                      data-toggle="dropdown"
-                      aria-expanded="true"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        //    xmlns:xlink="http://www.w3.org/1999/xlink"
-                        width="18px"
-                        height="18px"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                      >
-                        <g
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
-                        >
-                          <rect x="0" y="0" width="24" height="24"></rect>
-                          <circle fill="#000000" cx="5" cy="12" r="2"></circle>
-                          <circle fill="#000000" cx="12" cy="12" r="2"></circle>
-                          <circle fill="#000000" cx="19" cy="12" r="2"></circle>
-                        </g>
-                      </svg>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                      <Dropdown.Item className="dropdown-item">
-                        <i className="fa fa-user-circle text-primary me-2" />
-                        View profile
-                      </Dropdown.Item>
-                      <Dropdown.Item className="dropdown-item">
-                        <i className="fa fa-users text-primary me-2" />
-                        Add to close friends
-                      </Dropdown.Item>
-                      <Dropdown.Item className="dropdown-item">
-                        <i className="fa fa-plus text-primary me-2" />
-                        Add to group
-                      </Dropdown.Item>
-                      <Dropdown.Item className="dropdown-item">
-                        <i className="fa fa-ban text-primary me-2" />
-                        Block
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown> */}
                 </div>
               </div>
             </div>
@@ -214,339 +120,12 @@ const MentorDetail = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-xl-4">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="card">
-                <div className="card-body">
-                  <div className="profile-statistics">
-                    <div className="text-center">
-                      {/* <div className="row">
-                        <div className="col">
-                          <h3 className="m-b-0">150</h3>
-                          <span>Follower</span>
-                        </div>
-                        <div className="col">
-                          <h3 className="m-b-0">140</h3> <span>Place Stay</span>
-                        </div>
-                        <div className="col">
-                          <h3 className="m-b-0">45</h3> <span>Reviews</span>
-                        </div>
-                      </div> */}
-                      <div className="mt-4">
-                        <button
-                          type="button"
-                          className="btn btn-primary mb-1 me-1"
-                          onClick={handleChangeStatus}
-                        >
-                          Approve
-                        </button>
-                        {/* <Link
-                          to="/post-details"
-                          className="btn btn-success mb-1 me-1"
-                        >
-                          Approve
-                        </Link> */}
-                        <Button
-                          as="a"
-                          href="#"
-                          className="btn btn-primary mb-1 ms-1"
-                          onClick={() => setSendMessage(true)}
-                        >
-                          Send Message
-                        </Button>
-                      </div>
-                    </div>
-
-                    <Modal className="modal fade" show={sendMessage}>
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h5 className="modal-title">Send Message</h5>
-                          <Button
-                            variant=""
-                            type="button"
-                            className="btn-close"
-                            data-dismiss="modal"
-                            onClick={() => setSendMessage(false)}
-                          ></Button>
-                        </div>
-                        <div className="modal-body">
-                          <form
-                            className="comment-form"
-                            onSubmit={(e) => {
-                              e.preventDefault();
-                              setSendMessage(false);
-                            }}
-                          >
-                            <div className="row">
-                              <div className="col-lg-6">
-                                <div className="form-group mb-3">
-                                  <label
-                                    htmlFor="author"
-                                    className="text-black font-w600"
-                                  >
-                                    {" "}
-                                    Name <span className="required">
-                                      *
-                                    </span>{" "}
-                                  </label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    defaultValue="Author"
-                                    name="Author"
-                                    placeholder="Author"
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-6">
-                                <div className="form-group mb-3">
-                                  <label
-                                    htmlFor="email"
-                                    className="text-black font-w600"
-                                  >
-                                    {" "}
-                                    Email <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    defaultValue="Email"
-                                    placeholder="Email"
-                                    name="Email"
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-12">
-                                <div className="form-group mb-3">
-                                  <label
-                                    htmlFor="comment"
-                                    className="text-black font-w600"
-                                  >
-                                    Comment
-                                  </label>
-                                  <textarea
-                                    rows={8}
-                                    className="form-control"
-                                    name="comment"
-                                    placeholder="Comment"
-                                    defaultValue={""}
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-12">
-                                <div className="form-group mb-3">
-                                  <input
-                                    type="submit"
-                                    value="Post Comment"
-                                    className="submit btn btn-primary"
-                                    name="submit"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </Modal>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-12">
-              <div className="card">
-                <div className="card-header border-0 pb-0">
-                  <h5 className="text-primary">Course</h5>
-                </div>
-                <div className="card-body pt-3">
-                  <div className="profile-blog ">
-                    <img
-                      src={profile01}
-                      alt="profile"
-                      className="img-fluid  mb-4 w-100 "
-                    />
-                    <Link to="/post-details">
-                      {" "}
-                      <h4>haha</h4>{" "}
-                    </Link>
-                    <p className="mb-0">
-                      A small river named Duden flows by their place and
-                      supplies it with the necessary regelialia. It is a
-                      paradisematic country, in which roasted parts of sentences
-                      fly into your mouth.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* <div className="col-lg-12">
-              <div className="card">
-                <div className="card-header border-0 pb-0">
-                  <h5 className="text-primary ">Interest</h5>
-                </div>
-                <div className="card-body pt-3">
-                  <div className="profile-interest ">
-                    <SRLWrapper options={options}>
-                      <div className="row sp4">
-                        <div className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col mb-1">
-                          <a href={profile02}>
-                            {" "}
-                            <img
-                              src={profile02}
-                              alt="profileImage"
-                              className="img-fluid"
-                            />{" "}
-                          </a>
-                        </div>
-                        <div className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col mb-1">
-                          <a href={profile03}>
-                            {" "}
-                            <img
-                              src={profile03}
-                              alt="profile"
-                              className="img-fluid"
-                            />
-                          </a>
-                        </div>
-                        <div className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col mb-1">
-                          <a href={profile04}>
-                            <img
-                              src={profile04}
-                              alt="profile"
-                              className="img-fluid"
-                            />{" "}
-                          </a>
-                        </div>
-                        <div className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col mb-1">
-                          {" "}
-                          <a href={profile02}>
-                            <img
-                              src={profile02}
-                              alt="profile"
-                              className="img-fluid"
-                            />{" "}
-                          </a>
-                        </div>
-                        <div className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col mb-1">
-                          <a
-                            href={profile03}
-                            className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col"
-                          >
-                            <img
-                              src={profile03}
-                              alt="profile"
-                              className="img-fluid"
-                            />
-                          </a>
-                        </div>
-                        <div className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col mb-1">
-                          <a
-                            href={profile04}
-                            className="col-lg-4 col-xl-4 col-sm-4 col-6 int-col"
-                          >
-                            <img
-                              src={profile04}
-                              alt="profile"
-                              className="img-fluid"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                    </SRLWrapper>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-            {/* <div className="col-lg-12">
-              <div className="card">
-                <div className="card-header border-0 pb-0">
-                  <h5 className="text-primary">Our Latest News</h5>
-                </div>
-                <div className="card-body pt-3">
-                  <div className="profile-news">
-                    <div className="media pt-3 pb-3">
-                      <img
-                        src={profile05}
-                        alt=""
-                        className="me-3 rounded"
-                        width={75}
-                      />
-                      <div className="media-body">
-                        <h5 className="m-b-5">
-                          <Link to="/post-details" className="text-black">
-                            Collection of textile samples
-                          </Link>
-                        </h5>
-                        <p className="mb-0">
-                          I shared this on my fb wall a few months back, and I
-                          thought.{" "}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="media pt-3 pb-3">
-                      <img
-                        src={profile06}
-                        alt=""
-                        className="me-3 rounded"
-                        width={75}
-                      />
-                      <div className="media-body">
-                        <h5 className="m-b-5">
-                          <Link to="/post-details" className="text-black">
-                            Collection of textile samples
-                          </Link>
-                        </h5>
-                        <p className="mb-0">
-                          I shared this on my fb wall a few months back, and I
-                          thought.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="media pt-3 ">
-                      <img
-                        src={profile07}
-                        alt=""
-                        className="me-3 rounded"
-                        width={75}
-                      />
-                      <div className="media-body">
-                        <h5 className="m-b-5">
-                          <Link to="/post-details" className="text-black">
-                            Collection of textile samples
-                          </Link>
-                        </h5>
-                        <p className="mb-0">
-                          I shared this on my fb wall a few months back, and I
-                          thought.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-          </div>
-        </div>
-        <div className="col-xl-8">
+        <div className="col-xl-12">
           <div className="card">
             <div className="card-body">
               <div className="profile-tab">
                 <div className="custom-tab-1">
                   <ul className="nav nav-tabs">
-                    {/* <li
-                      className="nav-item"
-                      onClick={() => setActiveToggle("posts")}
-                    >
-                      <Link
-                        to="#my-posts"
-                        data-toggle="tab"
-                        className={`nav-link ${
-                          activeToggle === "posts" ? "active show" : ""
-                        }`}
-                      >
-                        Posts
-                      </Link>
-                    </li> */}
                     <li
                       className="nav-item"
                       onClick={() => setActiveToggle("aboutMe")}
@@ -566,7 +145,7 @@ const MentorDetail = () => {
                         to="#profile-settings"
                         data-toggle="tab"
                         onClick={() => setActiveToggle("setting")}
-                        className={`nav-link ${
+                        className={`nav-link  ${
                           activeToggle === "setting" ? "active show" : ""
                         }`}
                       >
@@ -575,484 +154,70 @@ const MentorDetail = () => {
                     </li>
                   </ul>
                   <div className="tab-content">
-                    {/* <div
-                      id="my-posts"
-                      className={`tab-pane fade ${
-                        activeToggle === "posts" ? "active show" : ""
-                      }`}
-                    >
-                      <div className="my-post-content pt-3">
-                        <div className="post-input">
-                          <textarea
-                            name="textarea"
-                            id="textarea"
-                            cols={30}
-                            rows={5}
-                            className="form-control bg-transparent"
-                            placeholder="Please type what you want...."
-                            defaultValue={""}
-                          />
-                          <Link
-                            to="/app-profile"
-                            className="btn btn-primary light px-3 me-1"
-                            data-toggle="modal"
-                            data-target="#linkModal"
-                            onClick={() => setLinkModal(true)}
-                          >
-                            <i className="fa fa-link m-0" />{" "}
-                          </Link>
-
-                          <Modal
-                            show={linkModal}
-                            onHide={() => setLinkModal(false)}
-                            className="modal fade post-input"
-                            id="linkModal"
-                            aria-hidden="true"
-                          >
-                            <div className="modal-content">
-                              <div className="modal-header">
-                                <h5 className="modal-title">Social Links</h5>
-                                <button
-                                  type="button"
-                                  className="btn-close"
-                                  data-dismiss="modal"
-                                  onClick={() => setLinkModal(false)}
-                                ></button>
-                              </div>
-                              <div className="modal-body">
-                                <Link
-                                  className="btn-social me-1 facebook"
-                                  to="/app-profile"
-                                >
-                                  <i className="fa fa-facebook" />
-                                </Link>
-                                <Link
-                                  className="btn-social me-1 google-plus"
-                                  to="/app-profile"
-                                >
-                                  {" "}
-                                  <i className="fa fa-google-plus" />
-                                </Link>
-                                <Link
-                                  className="btn-social me-1 linkedin"
-                                  to="/app-profile"
-                                >
-                                  <i className="fa fa-linkedin" />
-                                </Link>
-                                <Link
-                                  className="btn-social me-1 instagram"
-                                  to="/app-profile"
-                                >
-                                  {" "}
-                                  <i className="fa fa-instagram" />
-                                </Link>
-                                <Link
-                                  className="btn-social me-1 twitter"
-                                  to="/app-profile"
-                                >
-                                  <i className="fa fa-twitter" />
-                                </Link>
-                                <Link
-                                  className="btn-social me-1 youtube"
-                                  to="/app-profile"
-                                >
-                                  <i className="fa fa-youtube" />
-                                </Link>
-                                <Link
-                                  className="btn-social whatsapp"
-                                  to="/app-profile"
-                                >
-                                  <i className="fa fa-whatsapp" />
-                                </Link>
-                              </div>
-                            </div>
-                          </Modal>
-                          <Link
-                            to="/app-profile"
-                            className="btn btn-primary light px-3 me-1"
-                            data-toggle="modal"
-                            data-target="#cameraModal"
-                            onClick={() => setCameraModal(true)}
-                          >
-                            <i className="fa fa-camera m-0" />{" "}
-                          </Link>
-
-                          <Modal
-                            show={cameraModal}
-                            onHide={() => setCameraModal(false)}
-                            className="modal fade"
-                            id="cameraModal"
-                          >
-                            <div className="modal-content">
-                              <div className="modal-header">
-                                <h5 className="modal-title">Upload images</h5>
-                                <button
-                                  type="button"
-                                  className="btn-close"
-                                  data-dismiss="modal"
-                                  onClick={() => setCameraModal(false)}
-                                ></button>
-                              </div>
-                              <div className="modal-body">
-                                <div className="input-group mb-3">
-                                  <span className="input-group-text">
-                                    Upload
-                                  </span>
-                                  <div className="form-file">
-                                    <input
-                                      type="file"
-                                      className="form-file-input form-control"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </Modal>
-                          <Link
-                            to="/app-profile"
-                            className="btn btn-primary ms-1"
-                            data-toggle="modal"
-                            data-target="#postModal"
-                            onClick={() => setPostModal(true)}
-                          >
-                            Post
-                          </Link>
-
-                          <Modal
-                            show={postModal}
-                            onHide={() => setPostModal(false)}
-                            className="modal fade"
-                            id="postModal"
-                          >
-                            <div className="modal-content">
-                              <div className="modal-header">
-                                <h5 className="modal-title">Post</h5>
-                                <button
-                                  type="button"
-                                  className="btn-close"
-                                  data-dismiss="modal"
-                                  onClick={() => setPostModal(false)}
-                                ></button>
-                              </div>
-                              <div className="modal-body">
-                                <textarea
-                                  name="textarea"
-                                  id="textarea"
-                                  cols={30}
-                                  rows={5}
-                                  className="form-control mb-2 bg-transparent"
-                                  placeholder="Please type what you want...."
-                                  defaultValue={""}
-                                />
-                                <Link
-                                  className="btn btn-primary btn-rounded mt-1"
-                                  to="/app-profile"
-                                >
-                                  Post
-                                </Link>
-                              </div>
-                            </div>
-                          </Modal>
-                        </div>
-
-                        <div className="profile-uoloaded-post border-bottom-1 pb-5">
-                          <img
-                            src={profile08}
-                            alt=""
-                            className="img-fluid w-100 rounded"
-                          />
-                          <Link className="post-title" to="/post-details">
-                            <h3 className="text-black">
-                              Collection of textile samples lay spread
-                            </h3>
-                          </Link>
-                          <p>
-                            A wonderful serenity has take possession of my
-                            entire soul like these sweet morning of spare which
-                            enjoy whole heart.A wonderful serenity has take
-                            possession of my entire soul like these sweet
-                            morning of spare which enjoy whole heart.
-                          </p>
-                          <button className="btn btn-primary me-2">
-                            <span className="me-2">
-                              {" "}
-                              <i className="fa fa-heart" />{" "}
-                            </span>
-                            Like
-                          </button>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => setReplayModal(true)}
-                          >
-                            <span className="me-2">
-                              {" "}
-                              <i className="fa fa-reply" />
-                            </span>
-                            Reply
-                          </button>
-                        </div>
-                        <div className="profile-uoloaded-post border-bottom-1 pb-5">
-                          <img
-                            src={profile09}
-                            alt=""
-                            className="img-fluid w-100 rounded"
-                          />
-                          <Link className="post-title" to="/post-details">
-                            <h3 className="text-black">
-                              Collection of textile samples lay spread
-                            </h3>
-                          </Link>
-                          <p>
-                            A wonderful serenity has take possession of my
-                            entire soul like these sweet morning of spare which
-                            enjoy whole heart.A wonderful serenity has take
-                            possession of my entire soul like these sweet
-                            morning of spare which enjoy whole heart.
-                          </p>
-                          <button className="btn btn-primary me-2">
-                            <span className="me-2">
-                              {" "}
-                              <i className="fa fa-heart" />{" "}
-                            </span>
-                            Like
-                          </button>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => setReplayModal(true)}
-                          >
-                            <span className="me-2">
-                              {" "}
-                              <i className="fa fa-reply" />
-                            </span>
-                            Reply
-                          </button>
-                        </div>
-                        <div className="profile-uoloaded-post pb-3">
-                          <img
-                            src={profile08}
-                            alt=""
-                            className="img-fluid  w-100 rounded"
-                          />
-                          <Link className="post-title" to="/post-details">
-                            <h3 className="text-black">
-                              Collection of textile samples lay spread
-                            </h3>
-                          </Link>
-                          <p>
-                            A wonderful serenity has take possession of my
-                            entire soul like these sweet morning of spare which
-                            enjoy whole heart.A wonderful serenity has take
-                            possession of my entire soul like these sweet
-                            morning of spare which enjoy whole heart.
-                          </p>
-                          <button className="btn btn-primary me-2">
-                            <span className="me-2">
-                              <i className="fa fa-heart" />
-                            </span>
-                            Like
-                          </button>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => setReplayModal(true)}
-                          >
-                            <span className="me-2">
-                              {" "}
-                              <i className="fa fa-reply" />
-                            </span>
-                            Reply
-                          </button>
-                        </div>
-
-                        <Modal
-                          show={replayModal}
-                          onHide={() => setReplayModal(false)}
-                          className="modal fade"
-                          id="replyModal"
-                        >
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5 className="modal-title">Post Reply</h5>
-                              <button
-                                type="button"
-                                className="btn-close"
-                                data-dismiss="modal"
-                                onClick={() => setReplayModal(false)}
-                              ></button>
-                            </div>
-                            <div className="modal-body">
-                              <form>
-                                <textarea className="form-control" rows="4">
-                                  Message
-                                </textarea>
-                              </form>
-                            </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-danger light"
-                                data-dismiss="modal"
-                                onClick={() => setReplayModal(false)}
-                              >
-                                Close
-                              </button>
-                              <button type="button" className="btn btn-primary">
-                                Reply
-                              </button>
-                            </div>
-                          </div>
-                        </Modal>
-                      </div>
-                    </div> */}
                     <div
                       id="about-me"
                       className={`tab-pane fade ${
                         activeToggle === "aboutMe" ? "active show" : ""
                       }`}
                     >
-                      <div className="profile-about-me">
-                        <div className="pt-4 border-bottom-1 pb-3">
-                          <h4 className="text-primary">About Me</h4>
-                          <p className="mb-2">
-                            A wonderful serenity has taken possession of my
-                            entire soul, like these sweet mornings of spring
-                            which I enjoy with my whole heart. I am alone, and
-                            feel the charm of existence was created for the
-                            bliss of souls like mine.I am so happy, my dear
-                            friend, so absorbed in the exquisite sense of mere
-                            tranquil existence, that I neglect my talents.
-                          </p>
-                          <p>
-                            A collection of textile samples lay spread out on
-                            the table - Samsa was a travelling salesman - and
-                            above it there hung a picture that he had recently
-                            cut out of an illustrated magazine and housed in a
-                            nice, gilded frame.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="profile-skills mb-5">
-                        <h4 className="text-primary mb-2">Skills</h4>
-                        <Link
-                          to="/app-profile"
-                          className="btn btn-primary light btn-xs mb-1 me-1"
-                        >
-                          {" "}
-                          Admin
-                        </Link>
-                        <Link
-                          to="/app-profile"
-                          className="btn btn-primary light btn-xs mb-1 me-1"
-                        >
-                          {" "}
-                          Dashboard
-                        </Link>
-                        <Link
-                          to="/app-profile"
-                          className="btn btn-primary light btn-xs mb-1 me-1"
-                        >
-                          Photoshop
-                        </Link>
-                        <Link
-                          to="/app-profile"
-                          className="btn btn-primary light btn-xs mb-1 me-1"
-                        >
-                          Bootstrap
-                        </Link>
-                        <Link
-                          to="/app-profile"
-                          className="btn btn-primary light btn-xs mb-1 me-1"
-                        >
-                          Responsive
-                        </Link>
-                        <Link
-                          to="/app-profile"
-                          className="btn btn-primary light btn-xs mb-1 me-1"
-                        >
-                          Crypto
-                        </Link>
-                      </div>
-                      <div className="profile-lang  mb-5">
-                        <h4 className="text-primary mb-2">Language</h4>
-                        <Link
-                          to="/app-profile"
-                          className="text-muted pe-3 f-s-16"
-                        >
-                          <i className="flag-icon flag-icon-us" />
-                          English
-                        </Link>
-                        <Link
-                          to="/app-profile"
-                          className="text-muted pe-3 f-s-16"
-                        >
-                          <i className="flag-icon flag-icon-fr" />
-                          French
-                        </Link>
-                        <Link
-                          to="/app-profile"
-                          className="text-muted pe-3 f-s-16"
-                        >
-                          <i className="flag-icon flag-icon-bd" />
-                          Bangla
-                        </Link>
-                      </div>
-                      <div className="profile-personal-info">
-                        <h4 className="text-primary mb-4">
+                      <div className="profile-personal-info mt-4">
+                        <h3 className="text-primary mb-4">
                           Personal Information
-                        </h4>
+                        </h3>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h5 className="f-w-500">
+                            <h4 className="f-w-500">
                               {" "}
                               Full Name<span className="pull-right">:</span>
-                            </h5>
+                            </h4>
                           </div>
                           <div className="col-9">
-                            <span>{mentors.fullName}</span>
+                            <h4 className="text-muted">{mentors.fullName}</h4>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h5 className="f-w-500">
+                            <h4 className="f-w-500">
                               Phone<span className="pull-right">:</span>
-                            </h5>
+                            </h4>
                           </div>
                           <div className="col-9">
-                            <span>{mentors.phone}</span>
+                            <h4 className="text-muted">{mentors.phone}</h4>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h5 className="f-w-500">
+                            <h4 className="f-w-500">
                               {" "}
                               Gender<span className="pull-right">:</span>
-                            </h5>
+                            </h4>
                           </div>
                           <div className="col-9">
-                            <span>{mentors.gender}</span>
+                            <h4 className="text-muted">{mentors.gender}</h4>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h5 className="f-w-500">
+                            <h4 className="f-w-500">
                               {" "}
                               Location<span className="pull-right">:</span>
-                            </h5>
+                            </h4>
                           </div>
                           <div className="col-9">
-                            <span>
+                            <h4 className="text-muted">
                               {mentors.address}, {mentors.country}
-                            </span>
+                            </h4>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h5 className="f-w-500">
+                            <h4 className="f-w-500">
                               Website
                               <span className="pull-right">:</span>
-                            </h5>
+                            </h4>
                           </div>
                           <div className="col-9">
-                            <span>{mentors.websiteUrl}</span>
+                            <h4 className="text-muted">{mentors.websiteUrl}</h4>
                           </div>
                         </div>
                       </div>
@@ -1063,10 +228,10 @@ const MentorDetail = () => {
                         activeToggle === "setting" ? "active show" : ""
                       }`}
                     >
-                      <div className="pt-3">
+                      <div className="pt-3 mt-2">
                         <div className="settings-form">
-                          <h4 className="text-primary">Account Setting</h4>
-                          <form onSubmit={(e) => e.preventDefault()}>
+                          <h3 className="text-primary">Account Setting</h3>
+                          {/* <form onSubmit={(e) => e.preventDefault()}>
                             <div className="row">
                               <div className="form-group mb-3 col-md-6">
                                 <label className="form-label">Email</label>
@@ -1142,12 +307,194 @@ const MentorDetail = () => {
                             <button className="btn btn-primary" type="submit">
                               Sign in
                             </button>
+                          </form> */}
+                          <form onSubmit={updateMentor}>
+                            <div className="row mt-3">
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Full Name
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="fullName"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.fullName}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Qualification
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="qualification"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.qualification}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Phone
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="phone"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.phone}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Evidence
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="evidence"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.evidence}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Address
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="address"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.address}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Job
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="job"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.job}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Country
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="country"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.country}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Image
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="image"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.image}
+                                />
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Gender
+                                </label>
+                                <div className="radio form-control-lg text-center ">
+                                  <label className="col-md-3">
+                                    <input
+                                      type="radio"
+                                      className="form-check-input"
+                                      checked={mentors.gender === "Male"}
+                                      name="gender"
+                                      onChange={(e) => handleChange(e)}
+                                      value="Male"
+                                    />{" "}
+                                    Male
+                                  </label>
+                                  <label>
+                                    <input
+                                      type="radio"
+                                      className="form-check-input"
+                                      checked={mentors.gender === "Female"}
+                                      name="gender"
+                                      onChange={(e) => handleChange(e)}
+                                      value="Female"
+                                    />{" "}
+                                    Female
+                                  </label>
+                                </div>
+                              </div>
+                              <div className="form-group mb-3 col-md-6">
+                                <label className="col-form-label col-form-label-lg">
+                                  Website
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-lg"
+                                  name="websiteUrl"
+                                  onChange={(e) => handleChange(e)}
+                                  value={mentors.websiteUrl}
+                                />
+                              </div>
+                              {/* <div className="form-group mb-3 col-md-6">
+                      <label className="col-form-label col-form-label-lg">
+                        Status
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control form-control-lg"
+                        name="status"
+                        onChange={(e) => handleChange(e)}
+                        value={mentor.approveStatusId}
+                      />
+                    </div> */}
+                            </div>
+                            <div className="form-group"></div>
+                            <button className="btn btn-primary">Update</button>
                           </form>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-lg-4">
+          <div className="card">
+            <div className="card-header border-0 pb-0">
+              <h5 className="text-primary">Course</h5>
+            </div>
+            <div className="card-body pt-3">
+              <div className="profile-blog ">
+                <img
+                  src={profile01}
+                  alt="profile"
+                  className="img-fluid  mb-4 w-100 "
+                />
+                <Link to="/post-details">
+                  {" "}
+                  <h4>haha</h4>{" "}
+                </Link>
+                <p className="mb-0">
+                  A small river named Duden flows by their place and supplies it
+                  with the necessary regelialia. It is a paradisematic country,
+                  in which roasted parts of sentences fly into your mouth.
+                </p>
               </div>
             </div>
           </div>

@@ -64,20 +64,15 @@ const SideBar = () => {
       "task",
     ],
     //Course
-    course = [
-      "course",
-      "course-detail-:id",
-      "create-course",
-      "course-edit-:id",
-    ],
+    course = ["course", "id-course-detail", "create-course", ":id-course-edit"],
     //Major
     major = ["major", "create-major"],
     //Subject
     subject = ["subject", "create-subject"],
     //Mentor
-    mentor = ["mentor", "mentor-detail", "mentor-edit-:id"],
+    mentor = ["mentor", ":id-mentor-detail", ":id-mentor-edit"],
     //Mentee
-    mentee = ["mentee", "mentee-detail", "mentee-edit-:id"];
+    mentee = ["mentee", ":id-mentee-detail", ":id-mentee-edit"];
 
   return (
     <div

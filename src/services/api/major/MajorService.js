@@ -17,10 +17,6 @@ class MajorService {
     return axios.get(MAJOR_API_BASE_URL);
   }
 
-  deleteMajor(id) {
-    return axios.delete(MAJOR_API_BASE_URL + "/" + id);
-  }
-
   getMajorById(id) {
     return axios.get(MAJOR_API_BASE_URL + "/" + id + "?MajorId=" + id);
   }

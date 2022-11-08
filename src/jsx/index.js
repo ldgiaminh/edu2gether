@@ -78,8 +78,8 @@ const Markup = () => {
     //Course
     { url: "course", component: CourseList },
     { url: "create-course", component: CreateCourse },
-    { url: "course-detail-:id", component: CourseDetail },
-    { url: "course-edit-:id", component: EditCourse },
+    { url: ":id-course-detail", component: CourseDetail },
+    { url: ":id-course-edit", component: EditCourse },
 
     //Major
     { url: "major", component: MajorList },
@@ -91,13 +91,13 @@ const Markup = () => {
 
     //Mentor
     { url: "mentor", component: MentorList },
-    { url: "mentor-detail-:id", component: MentorDetail },
-    { url: "mentor-edit-:id", component: EditMentor },
+    { url: ":id-mentor-detail", component: MentorDetail },
+    { url: ":id-mentor-edit", component: EditMentor },
 
     //Mentee
     { url: "mentee", component: MenteeList },
-    { url: "mentee-detail", component: MenteeDetail },
-    { url: "mentee-edit-:id", component: EditMentee },
+    { url: ":id-mentee-detail", component: MenteeDetail },
+    { url: ":id-mentee-edit", component: EditMentee },
   ];
   let path = window.location.pathname;
   path = path.split("/");
