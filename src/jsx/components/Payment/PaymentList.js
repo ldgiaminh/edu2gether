@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import Loader from "../../loader";
 import { loadingToggleAction } from "../../../store/actions/AuthActions";
 
-import BookingService from "../../../services/api/booking/BookingService";
+import PaymentService from "../../../services/api/payment/PaymentService";
 
-const BookingList = (props) => {
+const PaymentList = (props) => {
   const dispatch = useDispatch();
 
   //useState For Search
@@ -16,17 +16,17 @@ const BookingList = (props) => {
 
   //useState For Render
   const [loading, setLoading] = useState(true);
-  const [bookings, setBookings] = useState([]);
+  const [payments, setPayments] = useState([]);
 
   //Search Function
   const handleFilter = (e) => {
     if (e.target.value === "") {
-      setBookings(search);
+      setPayments(search);
     } else {
       const filterResult = search.filter((item) =>
         item.name.toLowerCase().includes(e.target.value.toLowerCase())
       );
-      setBookings(filterResult);
+      setPayments(filterResult);
     }
     setFilterValue(e.target.value);
   };
@@ -37,8 +37,8 @@ const BookingList = (props) => {
       setLoading(true);
       dispatch(loadingToggleAction(true));
       try {
-        const response = await BookingService.getBookings();
-        setBookings(response.data);
+        const response = await PaymentService.getPayments();
+        setPayments(response.data);
         setSearch(response.data);
       } catch (error) {
         console.log(error);
@@ -50,30 +50,29 @@ const BookingList = (props) => {
   }, []);
 
   const sort = 5;
-  let paggination = Array(Math.ceil(bookings.length / sort))
+  let paggination = Array(Math.ceil(payments.length / sort))
     .fill()
     .map((_, i) => i + 1);
 
   const activePag = useRef(0);
   const jobData = useRef(
-    bookings.slice(activePag.current * sort, (activePag.current + 1) * sort)
+    payments.slice(activePag.current * sort, (activePag.current + 1) * sort)
   );
 
   const onClick = (i) => {
     activePag.current = i;
-    jobData.current = bookings.slice(
+    jobData.current = payments.slice(
       activePag.current * sort,
       (activePag.current + 1) * sort
     );
   };
 
   useEffect(() => {
-    jobData.current = bookings.slice(
+    jobData.current = payments.slice(
       activePag.current * sort,
       (activePag.current + 1) * sort
     );
   });
-
   return (
     <div className="col-12">
       {props.showLoading && <Loader />}
@@ -94,66 +93,56 @@ const BookingList = (props) => {
       <div className="card">
         <div className="card-body">
           <div className="w-100 table-responsive">
-            <div id="example_wrapper" className="dataTables_wrapper">
-              <table id="example" className="display w-100 dataTable">
+            <div id="patientTable_basic_table" className="dataTables_wrapper">
+              <table
+                id="example5"
+                className="display dataTable no-footer w-100"
+                style={{ minWidth: 845 }}
+                role="grid"
+                aria-describedby="example5_info"
+              >
                 <thead>
-                  {/* <tr role="row">
-                    {data.profileTable.columns.map((d, i) => (
-                      <th key={i}>{d}</th>
-                    ))}
-                  </tr> */}
                   <tr role="row">
-                    <th>Course</th>
-                    <th>Mentor</th>
-                    <th>Mentee</th>
-                    <th>Price</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th className="bg-none"></th>
+                    <th style={{ width: 73 }}>ID</th>
+                    <th style={{ width: 73 }}>Booking ID</th>
+                    <th style={{ width: 73 }}>Price</th>
+                    <th style={{ width: 73 }}>Method</th>
+                    <th style={{ width: 73 }}>Fail-Reason</th>
+                    <th style={{ width: 73 }}>Status</th>
+                    <th className="bg-none" style={{ width: 47 }}></th>
                   </tr>
                 </thead>
                 {!loading && (
                   <tbody>
-                    {jobData.current.map((booking, i) => {
+                    {jobData.current.map((payment, i) => {
                       return (
-                        <tr key={i}>
-                          <td>
-                            <h4>{booking.course.name}</h4>
-                          </td>
+                        <tr role="row" className="odd">
+                          <td>{payment.id}</td>
+                          <td>{payment.bookingId}</td>
+                          <td>{payment.totalPrice}</td>
                           <td>
                             <span className="text-dark font-w600">
-                              {booking.course.mentor.fullName}
+                              {payment.paymentType}
                             </span>
                           </td>
-                          <td>{booking.mentee.fullName}</td>
-                          <td>{booking.coursePrice}</td>
-
+                          <td>{payment.failReason.substr(0, 3)}</td>
                           <td>
-                            <div>
-                              <h5>
-                                {new Date(
-                                  booking.bookingTime
-                                ).toLocaleDateString()}
-                              </h5>
-                              <span className="fs-14">
-                                {new Date(
-                                  booking.bookingTime
-                                ).toLocaleTimeString()}
+                            {payment.status === "Completed" ? (
+                              <span className="badge light badge-success">
+                                <i className="fa fa-circle text-success me-1" />
+                                Completed
                               </span>
-                            </div>
-                          </td>
-                          <td>
-                            <span
-                              className={
-                                booking.status === "Complete"
-                                  ? "badge badge-success"
-                                  : booking.status === "Pending"
-                                  ? "badge badge-warning"
-                                  : "badge badge-danger"
-                              }
-                            >
-                              {booking.status}
-                            </span>
+                            ) : payment.status === "Canceled" ? (
+                              <span className="badge light badge-warning">
+                                <i className="fa fa-circle text-warning me-1" />
+                                Pending
+                              </span>
+                            ) : (
+                              <span className="badge light badge-danger">
+                                <i className="fa fa-circle text-danger me-1" />
+                                Canceled
+                              </span>
+                            )}
                           </td>
                           <td>
                             <Dropdown className="dropdown ms-auto text-right">
@@ -197,8 +186,9 @@ const BookingList = (props) => {
                                 </svg>
                               </Dropdown.Toggle>
                               <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
-                                <Dropdown.Item>View Booking</Dropdown.Item>
-                                <Dropdown.Item>Edit Booking</Dropdown.Item>
+                                <Dropdown.Item>Accept Patient</Dropdown.Item>
+                                <Dropdown.Item>Reject Order</Dropdown.Item>
+                                <Dropdown.Item>View Details</Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>
                           </td>
@@ -212,10 +202,10 @@ const BookingList = (props) => {
               <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
                 <div className="dataTables_info">
                   Showing {activePag.current * sort + 1} to{" "}
-                  {bookings.length > (activePag.current + 1) * sort
+                  {payments.length > (activePag.current + 1) * sort
                     ? (activePag.current + 1) * sort
-                    : bookings.length}{" "}
-                  of {bookings.length} entries
+                    : payments.length}{" "}
+                  of {payments.length} entries
                 </div>
                 <div
                   className="dataTables_paginate paging_simple_numbers"
@@ -223,7 +213,7 @@ const BookingList = (props) => {
                 >
                   <Link
                     className="paginate_button previous disabled"
-                    to="/booking"
+                    to="/payment"
                     onClick={() =>
                       activePag.current > 0 && onClick(activePag.current - 1)
                     }
@@ -237,7 +227,7 @@ const BookingList = (props) => {
                     {paggination.map((number, i) => (
                       <Link
                         key={i}
-                        to="/booking"
+                        to="/payment"
                         className={`paginate_button  ${
                           activePag.current === i ? "current" : ""
                         } `}
@@ -249,7 +239,7 @@ const BookingList = (props) => {
                   </span>
                   <Link
                     className="paginate_button next"
-                    to="/booking"
+                    to="/payment"
                     onClick={() =>
                       activePag.current + 1 < paggination.length &&
                       onClick(activePag.current + 1)
@@ -277,4 +267,4 @@ const mapStateToProps = (state) => {
     showLoading: state.auth.showLoading,
   };
 };
-export default connect(mapStateToProps)(BookingList);
+export default connect(mapStateToProps)(PaymentList);

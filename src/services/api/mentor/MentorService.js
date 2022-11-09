@@ -7,7 +7,7 @@ class MentorService {
     return axios.post(MENTOR_API_BASE_URL, mentor);
   }
 
-  getMentors(mentor) {
+  getMentors() {
     return axios.get(MENTOR_API_BASE_URL);
   }
 

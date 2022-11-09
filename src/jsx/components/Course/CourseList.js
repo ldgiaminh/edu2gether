@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown, Tab, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import Loader from "../../loader";
+import { loadingToggleAction } from "../../../store/actions/AuthActions";
 
 // import Approved from "./Status/Approved/Approved";
 // import Pending from "./Status/Pending/Pending";
@@ -9,12 +12,9 @@ import { useHistory } from "react-router-dom";
 
 import CourseService from "../../../services/api/course/CourseService";
 
-const CourseList = () => {
-  // const [data, setData] = useState(
-  //   document.querySelectorAll("#room_wrapper tbody tr")
-  // );
-
+const CourseList = (props) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   //useState For Search
   const [search, setSearch] = useState([]);
@@ -22,7 +22,7 @@ const CourseList = () => {
 
   //useState For Render
   const [loading, setLoading] = useState(true);
-  const [courses, setCourses] = useState(null);
+  const [courses, setCourses] = useState([]);
 
   //Search Function
   const handleFilter = (e) => {
@@ -41,6 +41,7 @@ const CourseList = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      dispatch(loadingToggleAction(true));
       try {
         const response = await CourseService.getCourses();
         setCourses(response.data);
@@ -49,6 +50,7 @@ const CourseList = () => {
         console.log(error);
       }
       setLoading(false);
+      dispatch(loadingToggleAction(false));
     };
     fetchData();
   }, []);
@@ -58,64 +60,56 @@ const CourseList = () => {
     history.push(`./course-edit-${id}`);
   };
 
-  // const sort = 10;
-  // const activePag = useRef(0);
-  // const [test, settest] = useState(0);
+  const sort = 5;
+  let paggination = Array(Math.ceil(courses.length / sort))
+    .fill()
+    .map((_, i) => i + 1);
 
-  // // Active data
-  // const chageData = (frist, sec) => {
-  //   for (var i = 0; i < data.length; ++i) {
-  //     if (i >= frist && i < sec) {
-  //       data[i].classList.remove("d-none");
+  const activePag = useRef(0);
+  const jobData = useRef(
+    courses.slice(activePag.current * sort, (activePag.current + 1) * sort)
+  );
+
+  const onClick = (i) => {
+    activePag.current = i;
+    jobData.current = courses.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  };
+
+  useEffect(() => {
+    jobData.current = courses.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  });
+
+  // const chackbox = document.querySelectorAll(".sorting_7 input");
+  // const motherChackBox = document.querySelector(".sorting_asc_7 input");
+  // // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
+  // const chackboxFun = (type) => {
+  //   for (let i = 0; i < chackbox.length; i++) {
+  //     const element = chackbox[i];
+  //     if (type === "all") {
+  //       if (motherChackBox.checked) {
+  //         element.checked = true;
+  //       } else {
+  //         element.checked = false;
+  //       }
   //     } else {
-  //       data[i].classList.add("d-none");
+  //       if (!element.checked) {
+  //         motherChackBox.checked = false;
+  //         break;
+  //       } else {
+  //         motherChackBox.checked = true;
+  //       }
   //     }
   //   }
   // };
-  // // use effect
-  // useEffect(() => {
-  //   setData(document.querySelectorAll("#room_wrapper tbody tr"));
-  //   //chackboxFun();
-  // }, [test]);
-
-  // // Active pagginarion
-  // activePag.current === 0 && chageData(0, sort);
-  // // paggination
-  // let paggination = Array(Math.ceil(data.length / sort))
-  //   .fill()
-  //   .map((_, i) => i + 1);
-
-  // // Active paggination & chage data
-  // const onClick = (i) => {
-  //   activePag.current = i;
-  //   chageData(activePag.current * sort, (activePag.current + 1) * sort);
-  //   settest(i);
-  // };
-
-  const chackbox = document.querySelectorAll(".sorting_7 input");
-  const motherChackBox = document.querySelector(".sorting_asc_7 input");
-  // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
-  const chackboxFun = (type) => {
-    for (let i = 0; i < chackbox.length; i++) {
-      const element = chackbox[i];
-      if (type === "all") {
-        if (motherChackBox.checked) {
-          element.checked = true;
-        } else {
-          element.checked = false;
-        }
-      } else {
-        if (!element.checked) {
-          motherChackBox.checked = false;
-          break;
-        } else {
-          motherChackBox.checked = true;
-        }
-      }
-    }
-  };
   return (
     <>
+      {props.showLoading && <Loader />}
       <Tab.Container defaultActiveKey="All">
         <div className="row">
           <div className="col-xl-12">
@@ -175,7 +169,7 @@ const CourseList = () => {
                     <table className="table card-table display mb-4 dataTablesCard booking-table room-list-tbl dataTable no-footer">
                       <thead>
                         <tr role="row">
-                          <th className="sorting_asc_7 bg-none">
+                          {/* <th className="sorting_asc_7 bg-none">
                             <div className="form-check  style-1">
                               <input
                                 type="checkbox"
@@ -185,21 +179,21 @@ const CourseList = () => {
                                 required=""
                               />
                             </div>
-                          </th>
+                          </th> */}
                           <th>Course Name</th>
                           <th>Mentor</th>
-                          <th>Major</th>
-                          <th>Subject</th>
+                          <th>Subject & Major</th>
+                          <th>Create-Date</th>
                           <th>Status</th>
                           <th className="bg-none"></th>
                         </tr>
                       </thead>
                       {!loading && (
                         <tbody>
-                          {courses.map((course) => {
+                          {jobData.current.map((course) => {
                             return (
                               <tr role="row" className="odd" key={course.id}>
-                                <td className="sorting_7">
+                                {/* <td className="sorting_7">
                                   <div className="form-check   style-1">
                                     <input
                                       type="checkbox"
@@ -209,7 +203,7 @@ const CourseList = () => {
                                       required=""
                                     />
                                   </div>
-                                </td>
+                                </td> */}
                                 <td>
                                   <div className="guest-bx">
                                     <div
@@ -231,7 +225,7 @@ const CourseList = () => {
                                       <h4 className="mb-0 mt-1">
                                         <Link
                                           className="text-black"
-                                          to={`./course-detail-${course.id}`}
+                                          to={`./${course.id}-course-detail`}
                                         >
                                           {course.name}
                                         </Link>
@@ -241,24 +235,32 @@ const CourseList = () => {
                                 </td>
                                 <td>
                                   <div>
-                                    <span className="fs-16">
+                                    <span className="text-dark font-w600 fs-16">
                                       {course.mentor.fullName}
                                     </span>
                                   </div>
                                 </td>
                                 <td>
                                   <div>
-                                    <span className="fs-16">
+                                    <h5 className="font-w600">
                                       {course.subject.name}
+                                    </h5>
+                                    <span className="fs-16">
+                                      {course.major.name}
                                     </span>
                                   </div>
                                 </td>
                                 <td>
                                   <div>
+                                    <h5 className="font-w600">
+                                      {new Date(
+                                        course.createTime
+                                      ).toLocaleDateString()}
+                                    </h5>
                                     <span className="fs-16">
-                                      {/* AC, Shower, Double Bed, Towel, Bathup,
-                                      <br /> Coffee Set, LED TV, Wifi */}
-                                      {course.major.name}
+                                      {new Date(
+                                        course.createTime
+                                      ).toLocaleTimeString()}
                                     </span>
                                   </div>
                                 </td>
@@ -267,17 +269,17 @@ const CourseList = () => {
                                     <span
                                       className={
                                         course.approveStatus === 1
-                                          ? "text-warning font-w600"
+                                          ? "text-warning fw-bold"
                                           : course.approveStatus === 3
                                           ? "text-success font-w600"
                                           : "text-danger font-w600"
                                       }
                                     >
                                       {course.approveStatus === 1
-                                        ? "Pending"
+                                        ? "PENDING"
                                         : course.approveStatus === 3
-                                        ? "Approved"
-                                        : "Reject"}
+                                        ? "APPROVED"
+                                        : "REJECT"}
                                     </span>
                                     {/* <span className="fs-14">
                                       Oct 24th - 26th
@@ -343,13 +345,13 @@ const CourseList = () => {
                         </tbody>
                       )}
                     </table>
-                    {/* <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
+                    <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
                       <div className="dataTables_info">
                         Showing {activePag.current * sort + 1} to{" "}
-                        {data.length > (activePag.current + 1) * sort
+                        {courses.length > (activePag.current + 1) * sort
                           ? (activePag.current + 1) * sort
-                          : data.length}{" "}
-                        of {data.length} entries
+                          : courses.length}{" "}
+                        of {courses.length} entries
                       </div>
                       <div
                         className="dataTables_paginate paging_simple_numbers mb-0"
@@ -357,7 +359,7 @@ const CourseList = () => {
                       >
                         <Link
                           className="paginate_button previous disabled"
-                          to="/guest-list"
+                          to="/course"
                           onClick={() =>
                             activePag.current > 0 &&
                             onClick(activePag.current - 1)
@@ -369,7 +371,7 @@ const CourseList = () => {
                           {paggination.map((number, i) => (
                             <Link
                               key={i}
-                              to="/guest-list"
+                              to="/course"
                               className={`paginate_button  ${
                                 activePag.current === i ? "current" : ""
                               } `}
@@ -382,7 +384,7 @@ const CourseList = () => {
 
                         <Link
                           className="paginate_button next"
-                          to="/guest-list"
+                          to="/course"
                           onClick={() =>
                             activePag.current + 1 < paggination.length &&
                             onClick(activePag.current + 1)
@@ -391,7 +393,7 @@ const CourseList = () => {
                           Next <i className="fa fa-angle-double-right"></i>
                         </Link>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </Tab.Pane>
@@ -412,4 +414,11 @@ const CourseList = () => {
   );
 };
 
-export default CourseList;
+const mapStateToProps = (state) => {
+  return {
+    errorMessage: state.auth.errorMessage,
+    successMessage: state.auth.successMessage,
+    showLoading: state.auth.showLoading,
+  };
+};
+export default connect(mapStateToProps)(CourseList);

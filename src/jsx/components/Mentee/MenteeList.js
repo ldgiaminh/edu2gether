@@ -2,15 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown, Tab } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import Loader from "../../loader";
+import { loadingToggleAction } from "../../../store/actions/AuthActions";
 
 import MenteeService from "../../../services/api/mentee/MenteeService";
 
-const MenteeList = () => {
-  // const [data, setData] = useState(
-  //   document.querySelectorAll("#concierge_wrapper tbody tr")
-  // );
-
+const MenteeList = (props) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   //useState For Search
   const [search, setSearch] = useState([]);
@@ -18,7 +18,7 @@ const MenteeList = () => {
 
   //useState For Render
   const [loading, setLoading] = useState(true);
-  const [mentees, setMentees] = useState(null);
+  const [mentees, setMentees] = useState([]);
 
   //Search Function
   const handleFilter = (e) => {
@@ -37,6 +37,8 @@ const MenteeList = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      dispatch(loadingToggleAction(true));
+
       try {
         const response = await MenteeService.getMentees();
         setMentees(response.data);
@@ -45,6 +47,7 @@ const MenteeList = () => {
         console.log(error);
       }
       setLoading(false);
+      dispatch(loadingToggleAction(false));
     };
     fetchData();
   }, []);
@@ -54,64 +57,57 @@ const MenteeList = () => {
     history.push(`./${id}-mentee-edit`);
   };
 
-  // const sort = 5;
-  // const activePag = useRef(0);
-  // const [test, settest] = useState(0);
+  const sort = 5;
+  let paggination = Array(Math.ceil(mentees.length / sort))
+    .fill()
+    .map((_, i) => i + 1);
 
-  // // Active data
-  // const chageData = (frist, sec) => {
-  //   for (var i = 0; i < data.length; ++i) {
-  //     if (i >= frist && i < sec) {
-  //       data[i].classList.remove("d-none");
+  const activePag = useRef(0);
+  const jobData = useRef(
+    mentees.slice(activePag.current * sort, (activePag.current + 1) * sort)
+  );
+
+  const onClick = (i) => {
+    activePag.current = i;
+    jobData.current = mentees.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  };
+
+  useEffect(() => {
+    jobData.current = mentees.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  });
+
+  // const chackbox = document.querySelectorAll(".sorting_1 input");
+  // const motherChackBox = document.querySelector(".sorting_asc input");
+  // // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
+  // const chackboxFun = (type) => {
+  //   for (let i = 0; i < chackbox.length; i++) {
+  //     const element = chackbox[i];
+  //     if (type === "all") {
+  //       if (motherChackBox.checked) {
+  //         element.checked = true;
+  //       } else {
+  //         element.checked = false;
+  //       }
   //     } else {
-  //       data[i].classList.add("d-none");
+  //       if (!element.checked) {
+  //         motherChackBox.checked = false;
+  //         break;
+  //       } else {
+  //         motherChackBox.checked = true;
+  //       }
   //     }
   //   }
   // };
-  // // use effect
-  // useEffect(() => {
-  //   setData(document.querySelectorAll("#concierge_wrapper tbody tr"));
-  //   //chackboxFun();
-  // }, [test]);
-
-  // // Active pagginarion
-  // activePag.current === 0 && chageData(0, sort);
-  // // paggination
-  // let paggination = Array(Math.ceil(data.length / sort))
-  //   .fill()
-  //   .map((_, i) => i + 1);
-
-  // // Active paggination & chage data
-  // const onClick = (i) => {
-  //   activePag.current = i;
-  //   chageData(activePag.current * sort, (activePag.current + 1) * sort);
-  //   settest(i);
-  // };
-
-  const chackbox = document.querySelectorAll(".sorting_1 input");
-  const motherChackBox = document.querySelector(".sorting_asc input");
-  // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
-  const chackboxFun = (type) => {
-    for (let i = 0; i < chackbox.length; i++) {
-      const element = chackbox[i];
-      if (type === "all") {
-        if (motherChackBox.checked) {
-          element.checked = true;
-        } else {
-          element.checked = false;
-        }
-      } else {
-        if (!element.checked) {
-          motherChackBox.checked = false;
-          break;
-        } else {
-          motherChackBox.checked = true;
-        }
-      }
-    }
-  };
   return (
     <>
+      {props.showLoading && <Loader />}
+
       <Tab.Container defaultActiveKey="All">
         <div className="row">
           <div className="col-xl-12">
@@ -144,7 +140,7 @@ const MenteeList = () => {
                     >
                       <thead>
                         <tr role="row">
-                          <th className="sorting_asc bg-none">
+                          {/* <th className="sorting_asc bg-none">
                             <div className="form-check  style-1">
                               <input
                                 type="checkbox"
@@ -154,13 +150,13 @@ const MenteeList = () => {
                                 required=""
                               />
                             </div>
-                          </th>
-                          <th className="sorting_asc">Full Name</th>
-                          <th className="sorting">Address</th>
-                          <th className="sorting">Gender</th>
-                          <th className="sorting">Contact</th>
-                          <th className="sorting">University</th>
-                          <th className="sorting bg-none"></th>
+                          </th> */}
+                          <th>Full Name</th>
+                          <th>Address</th>
+                          <th>Gender</th>
+                          <th>Contact</th>
+                          <th>University</th>
+                          <th className=" bg-none"></th>
                         </tr>
                       </thead>
                       {!loading && (
@@ -168,7 +164,7 @@ const MenteeList = () => {
                           {mentees.map((mentee) => {
                             return (
                               <tr role="row" className="odd" key={mentee.id}>
-                                <td className="sorting_1">
+                                {/* <td className="sorting_1">
                                   <div className="form-check  style-1">
                                     <input
                                       type="checkbox"
@@ -178,7 +174,7 @@ const MenteeList = () => {
                                       required=""
                                     />
                                   </div>
-                                </td>
+                                </td> */}
                                 <td>
                                   <div className="concierge-bx">
                                     <img
@@ -291,13 +287,13 @@ const MenteeList = () => {
                         </tbody>
                       )}
                     </table>
-                    {/* <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
+                    <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
                       <div className="dataTables_info">
                         Showing {activePag.current * sort + 1} to{" "}
-                        {data.length > (activePag.current + 1) * sort
+                        {mentees.length > (activePag.current + 1) * sort
                           ? (activePag.current + 1) * sort
-                          : data.length}{" "}
-                        of {data.length} entries
+                          : mentees.length}{" "}
+                        of {mentees.length} entries
                       </div>
                       <div
                         className="dataTables_paginate paging_simple_numbers"
@@ -305,7 +301,7 @@ const MenteeList = () => {
                       >
                         <Link
                           className="paginate_button previous "
-                          to="/concierge"
+                          to="/mentee"
                           onClick={() =>
                             activePag.current > 0 &&
                             onClick(activePag.current - 1)
@@ -321,7 +317,7 @@ const MenteeList = () => {
                           {paggination.map((number, i) => (
                             <Link
                               key={i}
-                              to="/concierge"
+                              to="/mentee"
                               className={`paginate_button  ${
                                 activePag.current === i ? "current" : ""
                               } `}
@@ -334,7 +330,7 @@ const MenteeList = () => {
 
                         <Link
                           className="paginate_button next"
-                          to="/concierge"
+                          to="/mentee"
                           onClick={() =>
                             activePag.current + 1 < paggination.length &&
                             onClick(activePag.current + 1)
@@ -347,7 +343,7 @@ const MenteeList = () => {
                           ></i>
                         </Link>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </Tab.Pane>
@@ -364,4 +360,11 @@ const MenteeList = () => {
     </>
   );
 };
-export default MenteeList;
+const mapStateToProps = (state) => {
+  return {
+    errorMessage: state.auth.errorMessage,
+    successMessage: state.auth.successMessage,
+    showLoading: state.auth.showLoading,
+  };
+};
+export default connect(mapStateToProps)(MenteeList);

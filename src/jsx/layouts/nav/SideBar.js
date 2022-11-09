@@ -67,7 +67,10 @@ const SideBar = () => {
     course = ["course", "id-course-detail", "create-course", ":id-course-edit"],
     //Booking
     booking = ["booking"],
-    //Major
+    //Payment
+    payment = ["payment"],
+    //Transaction
+    transaction = ["transaction"], //Major
     major = ["major", "create-major"],
     //Subject
     subject = ["subject", "create-subject"],
@@ -117,7 +120,7 @@ const SideBar = () => {
           </li>
           <li className={`${course.includes(path) ? "mm-active" : ""}`}>
             <Link to="course" className="ai-icon">
-              <i className="flaticon-381-notebook"></i>
+              <i className="flaticon-381-tab"></i>
               <span className="nav-text">Course</span>
             </Link>
           </li>
@@ -129,13 +132,13 @@ const SideBar = () => {
           </li>
           <li className={`${subject.includes(path) ? "mm-active" : ""}`}>
             <Link to="subject" className="ai-icon">
-              <i className="flaticon-381-note"></i>
+              <i className="flaticon-381-menu"></i>
               <span className="nav-text">Subject</span>
             </Link>
           </li>
           <li className={`${mentor.includes(path) ? "mm-active" : ""}`}>
             <Link to="mentor" className="ai-icon">
-              <i className="flaticon-381-user-8"></i>
+              <i className="flaticon-381-id-card-4"></i>
               <span className="nav-text">Mentor</span>
             </Link>
           </li>
@@ -147,8 +150,20 @@ const SideBar = () => {
           </li>
           <li className={`${booking.includes(path) ? "mm-active" : ""}`}>
             <Link to="booking" className="ai-icon">
-              <i className="flaticon-381-windows"></i>
+              <i className="flaticon-381-note"></i>
               <span className="nav-text">Booking</span>
+            </Link>
+          </li>
+          <li className={`${payment.includes(path) ? "mm-active" : ""}`}>
+            <Link to="payment" className="ai-icon">
+              <i className="flaticon-381-file-1"></i>
+              <span className="nav-text">Payment</span>
+            </Link>
+          </li>
+          <li className={`${transaction.includes(path) ? "mm-active" : ""}`}>
+            <Link to="transaction" className="ai-icon">
+              <i className="flaticon-381-television"></i>
+              <span className="nav-text">Transaction</span>
             </Link>
           </li>
         </MM>

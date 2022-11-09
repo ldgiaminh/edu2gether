@@ -34,6 +34,13 @@ import EditCourse from "./components/Course/Action/EditCourse";
 
 //Booking
 import BookingList from "./components/Booking/BookingList";
+
+//Payment
+import PaymentList from "./components/Payment/PaymentList";
+
+//Transaction
+import TransactionList from "./components/Transaction/TransactionList";
+
 //Major
 import MajorList from "./components/Major/MajorList";
 import CreateMajor from "./components/Major/action/CreateMajor";
@@ -85,6 +92,12 @@ const Markup = () => {
 
     //Booking
     { url: "booking", component: BookingList },
+
+    //Payment
+    { url: "payment", component: PaymentList },
+
+    //Transaction
+    { url: "transaction", component: TransactionList },
 
     //Major
     { url: "major", component: MajorList },

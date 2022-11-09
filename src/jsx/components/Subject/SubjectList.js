@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown, Tab } from "react-bootstrap";
+import { connect, useDispatch } from "react-redux";
+import Loader from "../../loader";
+import { loadingToggleAction } from "../../../store/actions/AuthActions";
 
 import SubjectService from "../../../services/api/subject/SubjectService";
 
@@ -53,10 +56,8 @@ const DropdownBlog = () => {
   );
 };
 
-const SubjectList = () => {
-  // const [data, setData] = useState(
-  //   document.querySelectorAll("#room_wrapper tbody tr")
-  // );
+const SubjectList = (props) => {
+  const dispatch = useDispatch();
 
   //useState For Search
   const [search, setSearch] = useState([]);
@@ -64,7 +65,7 @@ const SubjectList = () => {
 
   //useState For Render
   const [loading, setLoading] = useState(true);
-  const [subjects, setSubjects] = useState(null);
+  const [subjects, setSubjects] = useState([]);
 
   //Search Function
   const handleFilter = (e) => {
@@ -83,6 +84,8 @@ const SubjectList = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      dispatch(loadingToggleAction(true));
+
       try {
         const response = await SubjectService.getSubjects();
         setSubjects(response.data);
@@ -91,69 +94,61 @@ const SubjectList = () => {
         console.log(error);
       }
       setLoading(false);
+      dispatch(loadingToggleAction(false));
     };
     fetchData();
   }, []);
 
-  // const sort = 10;
-  // const activePag = useRef(0);
-  // const [test, settest] = useState(0);
+  const sort = 5;
+  let paggination = Array(Math.ceil(subjects.length / sort))
+    .fill()
+    .map((_, i) => i + 1);
 
-  // // Active data
-  // const chageData = (frist, sec) => {
-  //   for (var i = 0; i < data.length; ++i) {
-  //     if (i >= frist && i < sec) {
-  //       data[i].classList.remove("d-none");
+  const activePag = useRef(0);
+  const jobData = useRef(
+    subjects.slice(activePag.current * sort, (activePag.current + 1) * sort)
+  );
+
+  const onClick = (i) => {
+    activePag.current = i;
+    jobData.current = subjects.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  };
+
+  useEffect(() => {
+    jobData.current = subjects.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  });
+
+  // const chackbox = document.querySelectorAll(".sorting_7 input");
+  // const motherChackBox = document.querySelector(".sorting_asc_7 input");
+  // // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
+  // const chackboxFun = (type) => {
+  //   for (let i = 0; i < chackbox.length; i++) {
+  //     const element = chackbox[i];
+  //     if (type === "all") {
+  //       if (motherChackBox.checked) {
+  //         element.checked = true;
+  //       } else {
+  //         element.checked = false;
+  //       }
   //     } else {
-  //       data[i].classList.add("d-none");
+  //       if (!element.checked) {
+  //         motherChackBox.checked = false;
+  //         break;
+  //       } else {
+  //         motherChackBox.checked = true;
+  //       }
   //     }
   //   }
   // };
-
-  // // use effect
-  // useEffect(() => {
-  //   setData(document.querySelectorAll("#room_wrapper tbody tr"));
-  //   //chackboxFun();
-  // }, [test]);
-
-  // // Active pagginarion
-  // activePag.current === 0 && chageData(0, sort);
-  // // paggination
-  // let paggination = Array(Math.ceil(data.length / sort))
-  //   .fill()
-  //   .map((_, i) => i + 1);
-
-  // // Active paggination & chage data
-  // const onClick = (i) => {
-  //   activePag.current = i;
-  //   chageData(activePag.current * sort, (activePag.current + 1) * sort);
-  //   settest(i);
-  // };
-
-  const chackbox = document.querySelectorAll(".sorting_7 input");
-  const motherChackBox = document.querySelector(".sorting_asc_7 input");
-  // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
-  const chackboxFun = (type) => {
-    for (let i = 0; i < chackbox.length; i++) {
-      const element = chackbox[i];
-      if (type === "all") {
-        if (motherChackBox.checked) {
-          element.checked = true;
-        } else {
-          element.checked = false;
-        }
-      } else {
-        if (!element.checked) {
-          motherChackBox.checked = false;
-          break;
-        } else {
-          motherChackBox.checked = true;
-        }
-      }
-    }
-  };
   return (
     <>
+      {props.showLoading && <Loader />}
       <Tab.Container defaultActiveKey="All">
         <div className="row">
           <div className="col-xl-12">
@@ -189,7 +184,7 @@ const SubjectList = () => {
                     <table className="table card-table display mb-4 dataTablesCard booking-table room-list-tbl dataTable no-footer">
                       <thead>
                         <tr role="row">
-                          <th className="sorting_asc_7 bg-none">
+                          {/* <th className="sorting_asc_7 bg-none">
                             <div className="form-check  style-1">
                               <input
                                 type="checkbox"
@@ -199,8 +194,8 @@ const SubjectList = () => {
                                 required=""
                               />
                             </div>
-                          </th>
-                          <th>Major Name</th>
+                          </th> */}
+                          <th>Subject Name</th>
                           <th>Major</th>
 
                           <th>Detail</th>
@@ -209,10 +204,10 @@ const SubjectList = () => {
                       </thead>
                       {!loading && (
                         <tbody>
-                          {subjects.map((subject) => {
+                          {jobData.current.map((subject) => {
                             return (
                               <tr role="row" className="odd" key={subject.id}>
-                                <td className="sorting_7">
+                                {/* <td className="sorting_7">
                                   <div className="form-check   style-1">
                                     <input
                                       type="checkbox"
@@ -222,7 +217,7 @@ const SubjectList = () => {
                                       required=""
                                     />
                                   </div>
-                                </td>
+                                </td> */}
                                 <td>
                                   <div className="guest-bx">
                                     <div
@@ -273,13 +268,13 @@ const SubjectList = () => {
                         </tbody>
                       )}
                     </table>
-                    {/* <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
+                    <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
                       <div className="dataTables_info">
                         Showing {activePag.current * sort + 1} to{" "}
-                        {data.length > (activePag.current + 1) * sort
+                        {subjects.length > (activePag.current + 1) * sort
                           ? (activePag.current + 1) * sort
-                          : data.length}{" "}
-                        of {data.length} entries
+                          : subjects.length}{" "}
+                        of {subjects.length} entries
                       </div>
                       <div
                         className="dataTables_paginate paging_simple_numbers mb-0"
@@ -287,7 +282,7 @@ const SubjectList = () => {
                       >
                         <Link
                           className="paginate_button previous disabled"
-                          to="/guest-list"
+                          to="/subject"
                           onClick={() =>
                             activePag.current > 0 &&
                             onClick(activePag.current - 1)
@@ -299,7 +294,7 @@ const SubjectList = () => {
                           {paggination.map((number, i) => (
                             <Link
                               key={i}
-                              to="/guest-list"
+                              to="/subject"
                               className={`paginate_button  ${
                                 activePag.current === i ? "current" : ""
                               } `}
@@ -312,7 +307,7 @@ const SubjectList = () => {
 
                         <Link
                           className="paginate_button next"
-                          to="/guest-list"
+                          to="/subject"
                           onClick={() =>
                             activePag.current + 1 < paggination.length &&
                             onClick(activePag.current + 1)
@@ -321,7 +316,7 @@ const SubjectList = () => {
                           Next <i className="fa fa-angle-double-right"></i>
                         </Link>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </Tab.Pane>
@@ -334,4 +329,11 @@ const SubjectList = () => {
 };
 
 export { DropdownBlog };
-export default SubjectList;
+const mapStateToProps = (state) => {
+  return {
+    errorMessage: state.auth.errorMessage,
+    successMessage: state.auth.successMessage,
+    showLoading: state.auth.showLoading,
+  };
+};
+export default connect(mapStateToProps)(SubjectList);

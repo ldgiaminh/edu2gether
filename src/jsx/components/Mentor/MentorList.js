@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown, Tab, Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import Loader from "../../loader";
+import { loadingToggleAction } from "../../../store/actions/AuthActions";
 
 ///Import
 import Approved from "./Status/Approved/Approved";
@@ -10,12 +13,9 @@ import Reject from "./Status/Reject/Reject";
 
 import MentorService from "../../../services/api/mentor/MentorService";
 
-const MentorList = () => {
-  // const [data, setData] = useState(
-  //   document.querySelectorAll("#example2_wrapper tbody tr")
-  // );
-
+const MentorList = (props) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   //useState For Search
   const [search, setSearch] = useState([]);
@@ -23,7 +23,7 @@ const MentorList = () => {
 
   //useState For Render
   const [loading, setLoading] = useState(true);
-  const [mentors, setMentors] = useState(null);
+  const [mentors, setMentors] = useState([]);
 
   //Search Function
   const handleFilter = (e) => {
@@ -42,6 +42,7 @@ const MentorList = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      dispatch(loadingToggleAction(true));
       try {
         const response = await MentorService.getMentors();
         setMentors(response.data);
@@ -50,6 +51,7 @@ const MentorList = () => {
         console.log(error);
       }
       setLoading(false);
+      dispatch(loadingToggleAction(false));
     };
     fetchData();
   }, []);
@@ -59,64 +61,56 @@ const MentorList = () => {
     history.push(`./${id}-mentor-edit`);
   };
 
-  // const sort = 10;
-  // const activePag = useRef(0);
-  // const [test, settest] = useState(0);
+  const sort = 5;
+  let paggination = Array(Math.ceil(mentors.length / sort))
+    .fill()
+    .map((_, i) => i + 1);
 
-  // // Active data
-  // const chageData = (frist, sec) => {
-  //   for (var i = 0; i < data.length; ++i) {
-  //     if (i >= frist && i < sec) {
-  //       data[i].classList.remove("d-none");
+  const activePag = useRef(0);
+  const jobData = useRef(
+    mentors.slice(activePag.current * sort, (activePag.current + 1) * sort)
+  );
+
+  const onClick = (i) => {
+    activePag.current = i;
+    jobData.current = mentors.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  };
+
+  useEffect(() => {
+    jobData.current = mentors.slice(
+      activePag.current * sort,
+      (activePag.current + 1) * sort
+    );
+  });
+
+  // const chackbox = document.querySelectorAll(".sorting_1 input");
+  // const motherChackBox = document.querySelector(".sorting_asc input");
+  // // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
+  // const chackboxFun = (type) => {
+  //   for (let i = 0; i < chackbox.length; i++) {
+  //     const element = chackbox[i];
+  //     if (type === "all") {
+  //       if (motherChackBox.checked) {
+  //         element.checked = true;
+  //       } else {
+  //         element.checked = false;
+  //       }
   //     } else {
-  //       data[i].classList.add("d-none");
+  //       if (!element.checked) {
+  //         motherChackBox.checked = false;
+  //         break;
+  //       } else {
+  //         motherChackBox.checked = true;
+  //       }
   //     }
   //   }
   // };
-  // // use effect
-  // useEffect(() => {
-  //   setData(document.querySelectorAll("#example2_wrapper tbody tr"));
-  //   //chackboxFun();
-  // }, [test]);
-
-  // // Active pagginarion
-  // activePag.current === 0 && chageData(0, sort);
-  // // paggination
-  // let paggination = Array(Math.ceil(data.length / sort))
-  //   .fill()
-  //   .map((_, i) => i + 1);
-
-  // // Active paggination & chage data
-  // const onClick = (i) => {
-  //   activePag.current = i;
-  //   chageData(activePag.current * sort, (activePag.current + 1) * sort);
-  //   settest(i);
-  // };
-
-  const chackbox = document.querySelectorAll(".sorting_1 input");
-  const motherChackBox = document.querySelector(".sorting_asc input");
-  // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
-  const chackboxFun = (type) => {
-    for (let i = 0; i < chackbox.length; i++) {
-      const element = chackbox[i];
-      if (type === "all") {
-        if (motherChackBox.checked) {
-          element.checked = true;
-        } else {
-          element.checked = false;
-        }
-      } else {
-        if (!element.checked) {
-          motherChackBox.checked = false;
-          break;
-        } else {
-          motherChackBox.checked = true;
-        }
-      }
-    }
-  };
   return (
     <>
+      {props.showLoading && <Loader />}
       <Tab.Container defaultActiveKey="All">
         <div className="row">
           <div className="col-xl-12">
@@ -173,7 +167,7 @@ const MentorList = () => {
                     >
                       <thead>
                         <tr role="row">
-                          <th className="sorting_asc bg-none">
+                          {/* <th className="sorting_asc bg-none">
                             <div className="form-check  style-1">
                               <input
                                 type="checkbox"
@@ -183,23 +177,23 @@ const MentorList = () => {
                                 required=""
                               />
                             </div>
-                          </th>
-                          <th className="sorting_asc">Full Name</th>
-                          <th className="sorting">Job</th>
-                          <th className="sorting">Address</th>
-                          <th className="sorting">Qualification</th>
-                          <th className="sorting">Gender</th>
-                          <th className="sorting">Job</th>
-                          <th className="sorting">Status</th>
-                          <th className="sorting bg-none"></th>
+                          </th> */}
+                          <th>Full Name</th>
+                          <th>Job</th>
+                          <th>Address</th>
+                          <th>Qualification</th>
+                          <th>Gender</th>
+                          <th>Job</th>
+                          <th>Status</th>
+                          <th className="bg-none"></th>
                         </tr>
                       </thead>
                       {!loading && (
                         <tbody>
-                          {mentors.map((mentor) => {
+                          {jobData.current.map((mentor) => {
                             return (
                               <tr role="row" className="odd" key={mentor.id}>
-                                <td className="sorting_1">
+                                {/* <td className="sorting_1">
                                   <div className="form-check  style-1">
                                     <input
                                       type="checkbox"
@@ -209,7 +203,7 @@ const MentorList = () => {
                                       required=""
                                     />
                                   </div>
-                                </td>
+                                </td> */}
                                 <td>
                                   <div className="media-bx">
                                     <img
@@ -341,13 +335,13 @@ const MentorList = () => {
                         </tbody>
                       )}
                     </table>
-                    {/* <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
+                    <div className="d-sm-flex text-center justify-content-between align-items-center mt-3">
                       <div className="dataTables_info">
                         Showing {activePag.current * sort + 1} to{" "}
-                        {data.length > (activePag.current + 1) * sort
+                        {mentors.length > (activePag.current + 1) * sort
                           ? (activePag.current + 1) * sort
-                          : data.length}{" "}
-                        of {data.length} entries
+                          : mentors.length}{" "}
+                        of {mentors.length} entries
                       </div>
                       <div
                         className="dataTables_paginate paging_simple_numbers"
@@ -395,7 +389,7 @@ const MentorList = () => {
                           ></i>
                         </Link>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </Tab.Pane>
@@ -415,4 +409,11 @@ const MentorList = () => {
     </>
   );
 };
-export default MentorList;
+const mapStateToProps = (state) => {
+  return {
+    errorMessage: state.auth.errorMessage,
+    successMessage: state.auth.successMessage,
+    showLoading: state.auth.showLoading,
+  };
+};
+export default connect(mapStateToProps)(MentorList);
