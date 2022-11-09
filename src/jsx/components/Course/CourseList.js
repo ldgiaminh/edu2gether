@@ -57,7 +57,7 @@ const CourseList = (props) => {
 
   const editCourse = (e, id) => {
     e.preventDefault();
-    history.push(`./course-edit-${id}`);
+    history.push(`./${id}-course-edit`);
   };
 
   const sort = 5;

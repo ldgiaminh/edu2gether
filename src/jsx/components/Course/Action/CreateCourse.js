@@ -21,7 +21,7 @@ const CreateCourse = (props) => {
   //Use State For Subject
   const [subjects, setSubjects] = useState([{ id: "", name: "" }]);
 
-  var today = new Date(),
+  const today = new Date(),
     date =
       today.getFullYear() +
       "-" +

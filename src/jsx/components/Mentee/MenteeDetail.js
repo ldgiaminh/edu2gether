@@ -221,7 +221,7 @@ const MenteeDetail = () => {
                           nulla, placeat eum ex, ducimus in. Hic quo
                           necessitatibus autem tempora provident!
                         </p>
-                        <p class="text-danger fw-bold">
+                        <p className="text-danger fw-bold">
                           *Make sure you check email with condition to approve
                         </p>
                         <div className="col-12 d-flex">

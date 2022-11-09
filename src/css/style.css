@@ -44573,7 +44573,14 @@ table.dataTable.display tbody td {
   overflow: hidden;
 }
 
-.owl-carousel.gallery-carousel img {
+.course-img img {
+  width: 100%;
+  border-radius: 0.875rem;
+  object-fit: cover;
+  height: 18rem;
+}
+
+.owl-carousel.gallery-carousel video {
   width: 100%;
   border-radius: 0.875rem;
   object-fit: cover;
@@ -46044,11 +46051,11 @@ table.dataTable.display tbody td {
   color: #fff;
 }
 
-.course-detail-title {
-  margin-top: -300px !important;
+/* .course-detail-title {
+  margin-top: -200px !important;
 }
 
 .course-detail-infor {
-  margin-top: -200px !important;
-}
+  margin-top: -100px !important;
+} */
 /*# sourceMappingURL=style.css.map */

@@ -64,13 +64,19 @@ const SideBar = () => {
       "task",
     ],
     //Course
-    course = ["course", "id-course-detail", "create-course", ":id-course-edit"],
+    course = [
+      "course",
+      ":id-course-detail",
+      "create-course",
+      ":id-course-edit",
+    ],
     //Booking
     booking = ["booking"],
     //Payment
     payment = ["payment"],
     //Transaction
-    transaction = ["transaction"], //Major
+    transaction = ["transaction"],
+    //Major
     major = ["major", "create-major"],
     //Subject
     subject = ["subject", "create-subject"],
