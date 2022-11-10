@@ -76,19 +76,27 @@ const TransactionList = (props) => {
   return (
     <div className="col-12">
       {props.showLoading && <Loader />}
-      <div className="table-search">
-        <div className="input-group search-area mb-xxl-0 mb-4">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search here"
-            value={filterValue}
-            onInput={(e) => handleFilter(e)}
-          />
-          <span className="input-group-text">
-            <i className="flaticon-381-search-2"></i>
-          </span>
+      <div className="d-flex mb-4 justify-content-between align-items-center flex-wrap">
+        <div className="table-search">
+          <div className="input-group search-area mb-xxl-0 mb-4">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search here"
+              value={filterValue}
+              onInput={(e) => handleFilter(e)}
+            />
+            <span className="input-group-text">
+              <i className="flaticon-381-search-2"></i>
+            </span>
+          </div>
         </div>
+        {/* <Link to={"#"} className="btn btn-primary mb-xxl-0 mb-4 ">
+          <i className="far fa-file-word me-2"></i>Generate Report
+        </Link> */}
+        <button className="btn btn-primary mb-xxl-0 mb-4 ">
+          <i className="far fa-file-word me-2"></i>Generate Report
+        </button>
       </div>
       <div className="card">
         <div className="card-body">
@@ -150,7 +158,7 @@ const TransactionList = (props) => {
                           <td>{transaction.paymentId}</td>
 
                           <td>{transaction.amount}</td>
-                          <td>{transaction.description}</td>
+                          <td>{transaction.description.substr(0, 3)}</td>
                           <td>
                             {transaction.status === "Completed" ? (
                               <span className="badge light badge-success">
@@ -238,7 +246,7 @@ const TransactionList = (props) => {
                 >
                   <Link
                     className="paginate_button previous disabled"
-                    to="/payment"
+                    to="/transaction"
                     onClick={() =>
                       activePag.current > 0 && onClick(activePag.current - 1)
                     }
@@ -252,7 +260,7 @@ const TransactionList = (props) => {
                     {paggination.map((number, i) => (
                       <Link
                         key={i}
-                        to="/payment"
+                        to="/transaction"
                         className={`paginate_button  ${
                           activePag.current === i ? "current" : ""
                         } `}
@@ -264,7 +272,7 @@ const TransactionList = (props) => {
                   </span>
                   <Link
                     className="paginate_button next"
-                    to="/payment"
+                    to="/transaction"
                     onClick={() =>
                       activePag.current + 1 < paggination.length &&
                       onClick(activePag.current + 1)
