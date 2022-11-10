@@ -120,7 +120,8 @@ const TransactionList = (props) => {
               >
                 <thead>
                   <tr role="row">
-                    <th style={{ width: 73 }}>ID</th>
+                    <th style={{ width: 73 }}>Course</th>
+                    <th style={{ width: 73 }}>Mentor</th>
                     <th style={{ width: 73 }}>Create-Time</th>
                     <th style={{ width: 73 }}>Update-Time</th>
                     <th style={{ width: 73 }}>PayID</th>
@@ -135,7 +136,8 @@ const TransactionList = (props) => {
                     {jobData.current.map((transaction, i) => {
                       return (
                         <tr role="row" className="odd" key={i}>
-                          <td>{transaction.id}</td>
+                          <td>{transaction.payment.booking.course.name}</td>
+                          <td>{transaction.payment.booking.course.mentor.fullName}</td>
                           <td>
                             <div>
                               <h5>
