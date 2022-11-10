@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import Loader from "../../loader";
 import { loadingToggleAction } from "../../../store/actions/AuthActions";
-
+import CommonUtils from '../../../utils/CommonUtils'
 import TransactionService from "../../../services/api/transaction/TransactionService";
 
 const TransactionList = (props) => {
@@ -31,6 +31,14 @@ const TransactionList = (props) => {
     setFilterValue(e.target.value);
   };
 
+  //Export Data To Excel
+  let handleOnClickExport = async () => {
+    const response = await TransactionService.getTransactions();
+    if(response != null){
+      await CommonUtils.exportExcel(response.data,"Transaction","TransactionList.xlsx");
+    }
+  }
+
   //Fetch Data Api
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +46,7 @@ const TransactionList = (props) => {
       dispatch(loadingToggleAction(true));
       try {
         const response = await TransactionService.getTransactions();
+        console.log(response);
         setTransactions(response.data);
         setSearch(response.data);
       } catch (error) {
@@ -94,7 +103,7 @@ const TransactionList = (props) => {
         {/* <Link to={"#"} className="btn btn-primary mb-xxl-0 mb-4 ">
           <i className="far fa-file-word me-2"></i>Generate Report
         </Link> */}
-        <button className="btn btn-primary mb-xxl-0 mb-4 ">
+        <button className="btn btn-primary mb-xxl-0 mb-4 " onClick={() => handleOnClickExport()}>
           <i className="far fa-file-word me-2"></i>Generate Report
         </button>
       </div>
