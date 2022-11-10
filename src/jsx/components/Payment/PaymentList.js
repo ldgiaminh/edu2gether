@@ -121,8 +121,8 @@ const PaymentList = (props) => {
               >
                 <thead>
                   <tr role="row">
-                    <th style={{ width: 73 }}>ID</th>
-                    <th style={{ width: 73 }}>Booking ID</th>
+                    <th style={{ width: 73 }}>Course</th>
+                    <th style={{ width: 73 }}>Mentor</th>
                     <th style={{ width: 73 }}>Price</th>
                     <th style={{ width: 73 }}>Method</th>
                     <th style={{ width: 73 }}>Fail-Reason</th>
@@ -135,8 +135,8 @@ const PaymentList = (props) => {
                     {jobData.current.map((payment, i) => {
                       return (
                         <tr role="row" className="odd">
-                          <td>{payment.id}</td>
-                          <td>{payment.bookingId}</td>
+                          <td>{payment.booking.course.name}</td>
+                          <td>{payment.booking.course.mentor.fullName}</td>
                           <td>{payment.totalPrice}</td>
                           <td>
                             <span className="text-dark font-w600">
