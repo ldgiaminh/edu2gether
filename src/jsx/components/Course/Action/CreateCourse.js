@@ -13,6 +13,7 @@ import swal from "sweetalert";
 
 import CourseService from "../../../../services/api/course/CourseService";
 import SubjectService from "../../../../services/api/subject/SubjectService";
+import MentorService from "../../../../services/api/mentor/MentorService";
 
 const CreateCourse = (props) => {
   const history = useHistory();
@@ -20,6 +21,9 @@ const CreateCourse = (props) => {
 
   //Use State For Subject
   const [subjects, setSubjects] = useState([{ id: "", name: "" }]);
+
+  //Use State For Mentor
+  const [mentor, setMentor] = useState([{ id: "", name: "" }]);
 
   const today = new Date(),
     date =
@@ -67,6 +71,15 @@ const CreateCourse = (props) => {
     fetchData();
   }, []);
 
+  //Fetch Mentor Data Api
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await MentorService.getMentors();
+      setMentor(response.data);
+    };
+    fetchData();
+  }, []);
+
   const handleChange = (e) => {
     const value = e.target.value;
     setCourses({ ...courses, [e.target.name]: value });
@@ -103,15 +116,18 @@ const CreateCourse = (props) => {
         formData.append("isActived", courses.isActived);
         formData.append("approver", courses.approver);
         formData.append("approveStatus", courses.approveStatus);
-        CourseService.saveCourse(formData)
-          .then((response) => {
-            console.log(response.data);
-            swal("Success!", "Add New Courses Successful", "success");
-            history.push("/course");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        // CourseService.saveCourse(formData)
+        //   .then((response) => {
+        //     console.log(response.data);
+        //     swal("Success!", "Add New Courses Successful", "success");
+        //     history.push("/course");
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
+        for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
       });
     });
   };
@@ -172,13 +188,21 @@ const CreateCourse = (props) => {
                       <label className="col-form-label col-form-label-lg">
                         Mentor
                       </label>
-                      <input
-                        type="text"
+                      <select
                         className="form-control form-control-lg"
                         name="mentorId"
                         onChange={(e) => handleChange(e)}
                         value={courses.mentorId}
-                      />
+                      >
+                        <option value="" disabled>
+                          -- Choose Mentor --
+                        </option>
+                        {mentor.map((mentors) => (
+                          <option value={mentors.id} key={mentors.id}>
+                            {mentors.fullName}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="form-group mb-3 col-md-6">
                       <label className="col-form-label col-form-label-lg">

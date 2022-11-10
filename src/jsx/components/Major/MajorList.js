@@ -234,12 +234,11 @@ const MajorList = (props) => {
                                         #{major.id}
                                       </span>
                                       <h4 className="mb-0 mt-1">
-                                        <Link
+                                        <span
                                           className="text-black"
-                                          to={"./course-detail"}
                                         >
                                           {major.name}
-                                        </Link>
+                                        </span>
                                       </h4>
                                     </div>
                                   </div>

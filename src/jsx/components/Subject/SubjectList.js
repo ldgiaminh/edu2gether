@@ -237,12 +237,11 @@ const SubjectList = (props) => {
                                         #{subject.id}
                                       </span>
                                       <h4 className="mb-0 mt-1">
-                                        <Link
+                                        <span
                                           className="text-black"
-                                          to={"./course-detail"}
                                         >
                                           {subject.name}
-                                        </Link>
+                                        </span>
                                       </h4>
                                     </div>
                                   </div>
