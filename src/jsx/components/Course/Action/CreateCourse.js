@@ -54,7 +54,7 @@ const CreateCourse = (props) => {
     createTime: date,
     updateTime: "",
     publishDate: "",
-    isActived: "Active",
+    isActived: "On Going",
     approver: "Admin",
     approveStatus: 1,
   });
@@ -126,8 +126,8 @@ const CreateCourse = (props) => {
         //     console.log(error);
         //   });
         for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
+          console.log(pair[0] + ", " + pair[1]);
+        }
       });
     });
   };
