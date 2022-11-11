@@ -14,10 +14,10 @@ import {
 import loginbg from "../../images/pic1.png";
 
 function Login(props) {
-  const [email, setEmail] = useState("demo@example.com");
+  const [email, setEmail] = useState("");
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
-  const [password, setPassword] = useState("123456");
+  const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
 

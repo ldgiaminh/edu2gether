@@ -3,7 +3,7 @@ import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import Loader from "../../loader";
-import CommonUtils from '../../../utils/CommonUtils'
+import CommonUtils from "../../../utils/CommonUtils";
 import { loadingToggleAction } from "../../../store/actions/AuthActions";
 
 import PaymentService from "../../../services/api/payment/PaymentService";
@@ -35,11 +35,14 @@ const PaymentList = (props) => {
   //Export Data To Excel
   let handleOnClickExport = async () => {
     const response = await PaymentService.getPayments();
-    if(response != null){
-      await CommonUtils.exportExcel(response.data,"Payment","PaymentList.xlsx");
+    if (response != null) {
+      await CommonUtils.exportExcel(
+        response.data,
+        "Payment",
+        "PaymentList.xlsx"
+      );
     }
-  }
-
+  };
 
   //Fetch Data Api
   useEffect(() => {
@@ -104,7 +107,10 @@ const PaymentList = (props) => {
         {/* <Link to={"#"} className="btn btn-primary mb-xxl-0 mb-4 ">
           <i className="far fa-file-word me-2"></i>Generate Report
         </Link> */}
-        <button className="btn btn-primary mb-xxl-0 mb-4 " onClick={() => handleOnClickExport()} >
+        <button
+          className="btn btn-primary mb-xxl-0 mb-4 "
+          onClick={() => handleOnClickExport()}
+        >
           <i className="far fa-file-word me-2"></i>Generate Report
         </button>
       </div>
@@ -134,7 +140,7 @@ const PaymentList = (props) => {
                   <tbody>
                     {jobData.current.map((payment, i) => {
                       return (
-                        <tr role="row" className="odd">
+                        <tr role="row" className="odd" key={i}>
                           <td>{payment.booking.course.name}</td>
                           <td>{payment.booking.course.mentor.fullName}</td>
                           <td>{payment.totalPrice}</td>

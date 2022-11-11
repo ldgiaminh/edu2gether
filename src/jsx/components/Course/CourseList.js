@@ -114,7 +114,7 @@ const CourseList = (props) => {
         <div className="row">
           <div className="col-xl-12">
             <div className="d-flex mb-4 justify-content-between align-items-center flex-wrap">
-              <div className="card-tabs mt-3 mt-sm-0 mb-xxl-0 mb-4">
+              {/* <div className="card-tabs mt-3 mt-sm-0 mb-xxl-0 mb-4">
                 <Nav as="ul" className="nav nav-tabs" role="tablist">
                   <Nav.Item as="li" className="nav-item">
                     <Nav.Link className="nav-link" eventKey="All">
@@ -137,7 +137,7 @@ const CourseList = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
-              </div>
+              </div> */}
               <div className="table-search">
                 <div className="input-group search-area mb-xxl-0 mb-4">
                   <input

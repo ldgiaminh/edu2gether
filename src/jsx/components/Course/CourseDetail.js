@@ -218,7 +218,7 @@ const CourseDetail = (props) => {
                 </div>
               </div>
               <div className="mt-4">
-                <p class="card-text">
+                <p className="card-text">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. A,
                   minima! Eligendi minima illum itaque harum aliquam vel, sunt
                   magni dolorem! Cum quaerat est cupiditate saepe quidem, fugiat

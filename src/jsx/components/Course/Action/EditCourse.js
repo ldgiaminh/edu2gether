@@ -56,7 +56,7 @@ const EditCourse = (props) => {
     updateTime: date,
     publishDate: "",
     isActived: "",
-    approver: "Admin",
+    approver: "OnGoing",
     approveStatus: "",
   });
 
