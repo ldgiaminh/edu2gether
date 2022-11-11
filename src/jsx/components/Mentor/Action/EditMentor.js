@@ -67,7 +67,7 @@ const EditMentor = () => {
               <div className="basic-form">
                 <form onSubmit={updateMentor}>
                   <div className="row">
-                    <div className="form-group mb-3 col-md-6">
+                    {/* <div className="form-group mb-3 col-md-6">
                       <label className="col-form-label col-form-label-lg">
                         ID
                       </label>
@@ -78,7 +78,7 @@ const EditMentor = () => {
                         onChange={(e) => handleChange(e)}
                         value={mentor.id}
                       />
-                    </div>
+                    </div> */}
                     <div className="form-group mb-3 col-md-6">
                       <label className="col-form-label col-form-label-lg">
                         Full Name
