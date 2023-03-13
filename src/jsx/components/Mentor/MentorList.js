@@ -183,7 +183,7 @@ const MentorList = (props) => {
                           <th>Address</th>
                           <th>Qualification</th>
                           <th>Gender</th>
-                          <th>Job</th>
+                          <th>Contact</th>
                           <th>Status</th>
                           <th className="bg-none"></th>
                         </tr>
@@ -193,17 +193,6 @@ const MentorList = (props) => {
                           {jobData.current.map((mentor) => {
                             return (
                               <tr role="row" className="odd" key={mentor.id}>
-                                {/* <td className="sorting_1">
-                                  <div className="form-check  style-1">
-                                    <input
-                                      type="checkbox"
-                                      onClick={() => chackboxFun()}
-                                      className="form-check-input"
-                                      id="customCheckBox2"
-                                      required=""
-                                    />
-                                  </div>
-                                </td> */}
                                 <td>
                                   <div className="media-bx">
                                     <img
@@ -212,9 +201,6 @@ const MentorList = (props) => {
                                       alt=""
                                     />
                                     <div>
-                                      <span className="text-primary">
-                                        #{mentor.id}
-                                      </span>
                                       <h4 className="mb-0 mt-1">
                                         <Link
                                           to={`./${mentor.id}-mentor-detail`}

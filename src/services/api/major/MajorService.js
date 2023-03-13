@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const MAJOR_API_BASE_URL = "https://54.255.199.121/api/v1/majors";
+const MAJOR_API_BASE_URL = "http://13.214.189.72/api/v1/majors";
 
 const config = {
   headers: {
@@ -18,7 +18,7 @@ class MajorService {
   }
 
   getMajorById(id) {
-    return axios.get(MAJOR_API_BASE_URL + "/" + id + "?MajorId=" + id);
+    return axios.get(MAJOR_API_BASE_URL + "/" + id);
   }
 
   updateMajor(Major) {

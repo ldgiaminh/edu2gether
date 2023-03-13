@@ -82,28 +82,6 @@ const MenteeList = (props) => {
     );
   });
 
-  // const chackbox = document.querySelectorAll(".sorting_1 input");
-  // const motherChackBox = document.querySelector(".sorting_asc input");
-  // // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
-  // const chackboxFun = (type) => {
-  //   for (let i = 0; i < chackbox.length; i++) {
-  //     const element = chackbox[i];
-  //     if (type === "all") {
-  //       if (motherChackBox.checked) {
-  //         element.checked = true;
-  //       } else {
-  //         element.checked = false;
-  //       }
-  //     } else {
-  //       if (!element.checked) {
-  //         motherChackBox.checked = false;
-  //         break;
-  //       } else {
-  //         motherChackBox.checked = true;
-  //       }
-  //     }
-  //   }
-  // };
   return (
     <>
       {props.showLoading && <Loader />}
@@ -140,17 +118,6 @@ const MenteeList = (props) => {
                     >
                       <thead>
                         <tr role="row">
-                          {/* <th className="sorting_asc bg-none">
-                            <div className="form-check  style-1">
-                              <input
-                                type="checkbox"
-                                onClick={() => chackboxFun("all")}
-                                className="form-check-input"
-                                id="checkAll"
-                                required=""
-                              />
-                            </div>
-                          </th> */}
                           <th>Full Name</th>
                           <th>Address</th>
                           <th>Gender</th>
@@ -164,17 +131,6 @@ const MenteeList = (props) => {
                           {mentees.map((mentee) => {
                             return (
                               <tr role="row" className="odd" key={mentee.id}>
-                                {/* <td className="sorting_1">
-                                  <div className="form-check  style-1">
-                                    <input
-                                      type="checkbox"
-                                      onClick={() => chackboxFun()}
-                                      className="form-check-input"
-                                      id="customCheckBox2"
-                                      required=""
-                                    />
-                                  </div>
-                                </td> */}
                                 <td>
                                   <div className="concierge-bx">
                                     <img
@@ -183,9 +139,6 @@ const MenteeList = (props) => {
                                       alt=""
                                     />
                                     <div>
-                                      <span className="text-primary">
-                                        #{mentee.id}
-                                      </span>
                                       <h4 className="mt-1">
                                         <Link
                                           className="text-black"
@@ -194,9 +147,6 @@ const MenteeList = (props) => {
                                           {mentee.fullName}
                                         </Link>
                                       </h4>
-                                      {/* <span className="fs-14">
-                                      Join on January 21th, 2015
-                                    </span> */}
                                     </div>
                                   </div>
                                 </td>

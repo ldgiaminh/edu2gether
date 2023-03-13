@@ -123,28 +123,6 @@ const MajorList = (props) => {
     );
   });
 
-  // const chackbox = document.querySelectorAll(".sorting_7 input");
-  // const motherChackBox = document.querySelector(".sorting_asc_7 input");
-  // // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
-  // const chackboxFun = (type) => {
-  //   for (let i = 0; i < chackbox.length; i++) {
-  //     const element = chackbox[i];
-  //     if (type === "all") {
-  //       if (motherChackBox.checked) {
-  //         element.checked = true;
-  //       } else {
-  //         element.checked = false;
-  //       }
-  //     } else {
-  //       if (!element.checked) {
-  //         motherChackBox.checked = false;
-  //         break;
-  //       } else {
-  //         motherChackBox.checked = true;
-  //       }
-  //     }
-  //   }
-  // };
   return (
     <>
       {props.showLoading && <Loader />}
@@ -183,17 +161,6 @@ const MajorList = (props) => {
                     <table className="table card-table display mb-4 dataTablesCard booking-table room-list-tbl dataTable no-footer">
                       <thead>
                         <tr role="row">
-                          {/* <th className="sorting_asc_7 bg-none">
-                            <div className="form-check  style-1">
-                              <input
-                                type="checkbox"
-                                onClick={() => chackboxFun("all")}
-                                className="form-check-input"
-                                id="checkAll"
-                                required=""
-                              />
-                            </div>
-                          </th> */}
                           <th>Major Name</th>
                           <th>Detail</th>
                           <th className="bg-none"></th>
@@ -204,17 +171,6 @@ const MajorList = (props) => {
                           {jobData.current.map((major) => {
                             return (
                               <tr role="row" className="odd" key={major.id}>
-                                {/* <td className="sorting_7">
-                                  <div className="form-check   style-1">
-                                    <input
-                                      type="checkbox"
-                                      onClick={() => chackboxFun()}
-                                      className="form-check-input"
-                                      id="customCheckBox21"
-                                      required=""
-                                    />
-                                  </div>
-                                </td> */}
                                 <td>
                                   <div className="guest-bx">
                                     <div
@@ -230,21 +186,15 @@ const MajorList = (props) => {
                                       </div>
                                     </div>
                                     <div>
-                                      <span className="text-primary">
-                                        #{major.id}
-                                      </span>
                                       <h4 className="mb-0 mt-1">
-                                        <span
-                                          className="text-black"
-                                        >
+                                        <span className="text-black">
                                           {major.name}
                                         </span>
                                       </h4>
                                     </div>
                                   </div>
                                 </td>
-
-                                <td>
+                                <td style={{ width: "50%" }}>
                                   <div>
                                     <span className="fs-16">
                                       {major.detail}

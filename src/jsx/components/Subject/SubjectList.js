@@ -171,7 +171,7 @@ const SubjectList = (props) => {
                 to={"/create-subject"}
                 className="btn btn-primary mb-xxl-0 mb-4"
               >
-                <i className="far fa-plus-square me-2"></i>New
+                <i className="far fa-plus-square me-2"></i>Create New
               </Link>
             </div>
             <Tab.Content>
@@ -195,8 +195,8 @@ const SubjectList = (props) => {
                               />
                             </div>
                           </th> */}
-                          <th>Subject Name</th>
-                          <th>Major</th>
+                          <th>Subject name</th>
+                          <th>Major name</th>
 
                           <th>Detail</th>
                           <th className="bg-none"></th>
@@ -207,17 +207,6 @@ const SubjectList = (props) => {
                           {jobData.current.map((subject) => {
                             return (
                               <tr role="row" className="odd" key={subject.id}>
-                                {/* <td className="sorting_7">
-                                  <div className="form-check   style-1">
-                                    <input
-                                      type="checkbox"
-                                      onClick={() => chackboxFun()}
-                                      className="form-check-input"
-                                      id="customCheckBox21"
-                                      required=""
-                                    />
-                                  </div>
-                                </td> */}
                                 <td>
                                   <div className="guest-bx">
                                     <div
@@ -233,13 +222,8 @@ const SubjectList = (props) => {
                                       </div>
                                     </div>
                                     <div>
-                                      <span className="text-primary">
-                                        #{subject.id}
-                                      </span>
                                       <h4 className="mb-0 mt-1">
-                                        <span
-                                          className="text-black"
-                                        >
+                                        <span className="text-black">
                                           {subject.name}
                                         </span>
                                       </h4>
@@ -251,7 +235,7 @@ const SubjectList = (props) => {
                                     {subject.major.name}
                                   </span>
                                 </td>
-                                <td>
+                                <td style={{ width: "40%" }}>
                                   <div>
                                     <span className="fs-16">
                                       {subject.detail}

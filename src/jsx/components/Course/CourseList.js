@@ -85,28 +85,6 @@ const CourseList = (props) => {
     );
   });
 
-  // const chackbox = document.querySelectorAll(".sorting_7 input");
-  // const motherChackBox = document.querySelector(".sorting_asc_7 input");
-  // // console.log(document.querySelectorAll(".sorting_1 input")[0].checked);
-  // const chackboxFun = (type) => {
-  //   for (let i = 0; i < chackbox.length; i++) {
-  //     const element = chackbox[i];
-  //     if (type === "all") {
-  //       if (motherChackBox.checked) {
-  //         element.checked = true;
-  //       } else {
-  //         element.checked = false;
-  //       }
-  //     } else {
-  //       if (!element.checked) {
-  //         motherChackBox.checked = false;
-  //         break;
-  //       } else {
-  //         motherChackBox.checked = true;
-  //       }
-  //     }
-  //   }
-  // };
   return (
     <>
       {props.showLoading && <Loader />}
@@ -156,7 +134,7 @@ const CourseList = (props) => {
                 to={"/create-course"}
                 className="btn btn-primary mb-xxl-0 mb-4"
               >
-                <i className="far fa-plus-square me-2"></i>New
+                <i className="far fa-plus-square me-2"></i>Create New
               </Link>
             </div>
             <Tab.Content>
@@ -169,17 +147,6 @@ const CourseList = (props) => {
                     <table className="table card-table display mb-4 dataTablesCard booking-table room-list-tbl dataTable no-footer">
                       <thead>
                         <tr role="row">
-                          {/* <th className="sorting_asc_7 bg-none">
-                            <div className="form-check  style-1">
-                              <input
-                                type="checkbox"
-                                onClick={() => chackboxFun("all")}
-                                className="form-check-input"
-                                id="checkAll"
-                                required=""
-                              />
-                            </div>
-                          </th> */}
                           <th>Course Name</th>
                           <th>Mentor</th>
                           <th>Subject & Major</th>
@@ -193,17 +160,6 @@ const CourseList = (props) => {
                           {jobData.current.map((course) => {
                             return (
                               <tr role="row" className="odd" key={course.id}>
-                                {/* <td className="sorting_7">
-                                  <div className="form-check   style-1">
-                                    <input
-                                      type="checkbox"
-                                      onClick={() => chackboxFun()}
-                                      className="form-check-input"
-                                      id="customCheckBox21"
-                                      required=""
-                                    />
-                                  </div>
-                                </td> */}
                                 <td>
                                   <div className="guest-bx">
                                     <div
@@ -213,15 +169,12 @@ const CourseList = (props) => {
                                       <div className="carousel-inner">
                                         <img
                                           src={course.image}
-                                          className="d-block w-100"
+                                          className="d-block w-100 h-800"
                                           alt="..."
                                         />
                                       </div>
                                     </div>
                                     <div>
-                                      <span className="text-primary">
-                                        #{course.id}
-                                      </span>
                                       <h4 className="mb-0 mt-1">
                                         <Link
                                           className="text-black"

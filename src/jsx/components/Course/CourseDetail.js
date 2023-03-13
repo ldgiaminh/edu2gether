@@ -94,7 +94,6 @@ const CourseDetail = (props) => {
   }, [id]);
 
   const handleChangeStatus = (e) => {
-    //e.preventDefault();
     dispatch(loadingToggleAction(true));
     const formData = new FormData();
     formData.append("id", id);
@@ -119,14 +118,17 @@ const CourseDetail = (props) => {
       .then(() => {
         dispatch(loadingToggleAction(false));
         swal("Success!", "Approved Successful", "success");
-        history.push("/course");
+        setCourses({
+          ...courses,
+          updateTime: " ",
+          publishDate: date,
+          approver: "Admin",
+          approveStatus: 3,
+        });
       })
       .catch((error) => {
         console.log(error);
       });
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
   };
 
   return (
@@ -140,15 +142,12 @@ const CourseDetail = (props) => {
       <div className="row">
         <div className="col-xl-9 col-xxl-8">
           <div className="card">
-            {/* <div className="card-header border-0 pb-0">
-              <h4 className="card-title">{courses.name}</h4>
-            </div> */}
             <div className="card-header d-block">
               <div className="course-img pb-3">
                 <ReactPlayer
                   url={courses.videoUrl}
-                  width="730px"
-                  height="300px"
+                  width="100%"
+                  height="500px"
                   playing={true}
                   controls={true}
                   muted={true}
@@ -218,16 +217,7 @@ const CourseDetail = (props) => {
                 </div>
               </div>
               <div className="mt-4">
-                <p className="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. A,
-                  minima! Eligendi minima illum itaque harum aliquam vel, sunt
-                  magni dolorem! Cum quaerat est cupiditate saepe quidem, fugiat
-                  in at magni ad provident distinctio eum tempore laboriosam
-                  adipisci, tempora cumque ex quis unde voluptatem consequuntur.
-                  Excepturi quibusdam accusamus deleniti officiis ullam
-                  repellendus magni unde? Saepe quibusdam vel, ipsum numquam
-                  ratione tempore.
-                </p>
+                <p className="card-text">{courses.detail}</p>
               </div>
             </div>
             {courses.approveStatus === 1 ? (
@@ -281,21 +271,19 @@ const CourseDetail = (props) => {
                   className="rounded profile-img me-4"
                 />
                 <div>
-                  <h5 className="text-primary">#{mentors.mentor.id}</h5>
+                  <h5 className="text-primary">{mentors.mentor.phone}</h5>
                   <h4 className="mb-0">{mentors.mentor.fullName}</h4>
                 </div>
               </div>
               <div className="row mt-1 pt-3">
-                <div className="col-8">
-                  <Link to={"#"} className="btn btn-dark light btn-block">
-                    View Profile
+                <div className="col-12">
+                  <Link
+                    to={`./${mentors.mentor.id}-mentor-detail`}
+                    className="btn btn-dark light btn-block"
+                  >
+                    View Detail
                   </Link>
                 </div>
-                {/* <div className="col-4">
-                  <Link to={"#"} className="btn btn-danger btn-block">
-                    <i className="far fa-times-circle scale3"></i>
-                  </Link>
-                </div> */}
               </div>
               <ul className="user-info-list">
                 <li>
@@ -318,7 +306,7 @@ const CourseDetail = (props) => {
               <h3 className="text-align-center">More Information</h3>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
-                  <span className="mb-0 title">Publish Date</span> :
+                  <span className="mb-0 title">Public Date</span> :
                   <span className="text-black ms-2">
                     {courses.publishDate === null
                       ? "Course Not Approve By Admin"
@@ -326,11 +314,11 @@ const CourseDetail = (props) => {
                   </span>
                 </li>
                 <li className="list-group-item">
-                  <span className="mb-0 title">Update Date</span> :
+                  <span className="mb-0 title">Last Update</span> :
                   <span className="text-black ms-2">
                     {courses.updateTime === null
                       ? "Course Not Update By Mentor"
-                      : courses.updateTime}
+                      : new Date(courses.updateTime).toLocaleString()}
                   </span>
                 </li>
                 <li className="list-group-item">
@@ -340,7 +328,7 @@ const CourseDetail = (props) => {
                   </span>
                 </li>
                 <li className="list-group-item">
-                  <span className="mb-0 title">Discount</span> :
+                  <span className="mb-0 title">Discount (%)</span> :
                   <span className="text-black ms-2">{courses.discount} %</span>
                 </li>
                 <li className="list-group-item">

@@ -137,7 +137,7 @@ const MentorDetail = () => {
                           activeToggle === "aboutMe" ? "active show" : ""
                         }`}
                       >
-                        About Me
+                        Overview
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -161,63 +161,61 @@ const MentorDetail = () => {
                       }`}
                     >
                       <div className="profile-personal-info mt-4">
-                        <h3 className="text-primary mb-4">
-                          Personal Information
-                        </h3>
+                        <h4 className="text-primary mb-4">Thông tin cá nhân</h4>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h4 className="f-w-500">
+                            <h5 className="f-w-500">
                               {" "}
                               Full Name<span className="pull-right">:</span>
-                            </h4>
+                            </h5>
                           </div>
                           <div className="col-9">
-                            <h4 className="text-muted">{mentors.fullName}</h4>
+                            <h6 className="text-muted">{mentors.fullName}</h6>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h4 className="f-w-500">
+                            <h5 className="f-w-500">
                               Phone<span className="pull-right">:</span>
-                            </h4>
+                            </h5>
                           </div>
                           <div className="col-9">
-                            <h4 className="text-muted">{mentors.phone}</h4>
+                            <h6 className="text-muted">{mentors.phone}</h6>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h4 className="f-w-500">
+                            <h5 className="f-w-500">
                               {" "}
                               Gender<span className="pull-right">:</span>
-                            </h4>
+                            </h5>
                           </div>
                           <div className="col-9">
-                            <h4 className="text-muted">{mentors.gender}</h4>
+                            <h6 className="text-muted">{mentors.gender}</h6>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h4 className="f-w-500">
+                            <h5 className="f-w-500">
                               {" "}
                               Location<span className="pull-right">:</span>
-                            </h4>
+                            </h5>
                           </div>
                           <div className="col-9">
-                            <h4 className="text-muted">
+                            <h6 className="text-muted">
                               {mentors.address}, {mentors.country}
-                            </h4>
+                            </h6>
                           </div>
                         </div>
                         <div className="row mb-2">
                           <div className="col-3">
-                            <h4 className="f-w-500">
+                            <h5 className="f-w-500">
                               Website
                               <span className="pull-right">:</span>
-                            </h4>
+                            </h5>
                           </div>
                           <div className="col-9">
-                            <h4 className="text-muted">{mentors.websiteUrl}</h4>
+                            <h6 className="text-muted">{mentors.websiteUrl}</h6>
                           </div>
                         </div>
                       </div>
@@ -227,245 +225,7 @@ const MentorDetail = () => {
                       className={`tab-pane fade ${
                         activeToggle === "setting" ? "active show" : ""
                       }`}
-                    >
-                      <div className="pt-3 mt-2">
-                        <div className="settings-form">
-                          <h3 className="text-primary">Account Setting</h3>
-                          {/* <form onSubmit={(e) => e.preventDefault()}>
-                            <div className="row">
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="form-label">Email</label>
-                                <input
-                                  type="email"
-                                  placeholder="Email"
-                                  className="form-control"
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="form-label">Password</label>
-                                <input
-                                  type="password"
-                                  placeholder="Password"
-                                  className="form-control"
-                                />
-                              </div>
-                            </div>
-                            <div className="form-group mb-3">
-                              <label className="form-label">Address</label>
-                              <input
-                                type="text"
-                                placeholder="1234 Main St"
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="form-group mb-3">
-                              <label className="form-label">Address 2</label>
-                              <input
-                                type="text"
-                                placeholder="Apartment, studio, or floor"
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="row">
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="form-label">City</label>
-                                <input type="text" className="form-control" />
-                              </div>
-                              <div className="form-group mb-3 col-md-4">
-                                <label className="form-label">State</label>
-                                <select
-                                  className="form-control"
-                                  id="inputState"
-                                  defaultValue="option-1"
-                                >
-                                  <option value="option-1">Choose...</option>
-                                  <option value="option-2">Option 1</option>
-                                  <option value="option-3">Option 2</option>
-                                  <option value="option-4">Option 3</option>
-                                </select>
-                              </div>
-                              <div className="form-group mb-3 col-md-2">
-                                <label className="form-label">Zip</label>
-                                <input type="text" className="form-control" />
-                              </div>
-                            </div>
-                            <div className="form-group mb-3">
-                              <div className="form-check custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="form-check-input"
-                                  id="gridCheck"
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="gridCheck"
-                                >
-                                  Check me out
-                                </label>
-                              </div>
-                            </div>
-                            <button className="btn btn-primary" type="submit">
-                              Sign in
-                            </button>
-                          </form> */}
-                          <form onSubmit={updateMentor}>
-                            <div className="row mt-3">
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Full Name
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="fullName"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.fullName}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Qualification
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="qualification"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.qualification}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Phone
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="phone"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.phone}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Evidence
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="evidence"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.evidence}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Address
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="address"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.address}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Job
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="job"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.job}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Country
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="country"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.country}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Image
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="image"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.image}
-                                />
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Gender
-                                </label>
-                                <div className="radio form-control-lg text-center ">
-                                  <label className="col-md-3">
-                                    <input
-                                      type="radio"
-                                      className="form-check-input"
-                                      checked={mentors.gender === "Male"}
-                                      name="gender"
-                                      onChange={(e) => handleChange(e)}
-                                      value="Male"
-                                    />{" "}
-                                    Male
-                                  </label>
-                                  <label>
-                                    <input
-                                      type="radio"
-                                      className="form-check-input"
-                                      checked={mentors.gender === "Female"}
-                                      name="gender"
-                                      onChange={(e) => handleChange(e)}
-                                      value="Female"
-                                    />{" "}
-                                    Female
-                                  </label>
-                                </div>
-                              </div>
-                              <div className="form-group mb-3 col-md-6">
-                                <label className="col-form-label col-form-label-lg">
-                                  Website
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  name="websiteUrl"
-                                  onChange={(e) => handleChange(e)}
-                                  value={mentors.websiteUrl}
-                                />
-                              </div>
-                              {/* <div className="form-group mb-3 col-md-6">
-                      <label className="col-form-label col-form-label-lg">
-                        Status
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-lg"
-                        name="status"
-                        onChange={(e) => handleChange(e)}
-                        value={mentor.approveStatusId}
-                      />
-                    </div> */}
-                            </div>
-                            <div className="form-group"></div>
-                            <button className="btn btn-primary">Update</button>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -473,7 +233,7 @@ const MentorDetail = () => {
           </div>
         </div>
       </div>
-      <div className="row">
+      {/* <div className="row">
         <div className="col-lg-4">
           <div className="card">
             <div className="card-header border-0 pb-0">
@@ -499,7 +259,7 @@ const MentorDetail = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </Fragment>
   );
 };
